@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "services": {
+      "type": "library",
+      "root": "libs/backend/services",
+      "entryFile": "index",
+      "sourceRoot": "libs/backend/services/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/backend/services/tsconfig.lib.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true
+  }
+}

@@ -1,7 +1,375 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "wx-frontend-ng": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/wx-frontend-ng",
+      "sourceRoot": "apps/wx-frontend-ng/src",
+      "prefix": "wx",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/wx-frontend-ng",
+            "index": "apps/wx-frontend-ng/src/index.html",
+            "main": "apps/wx-frontend-ng/src/main.ts",
+            "polyfills": "apps/wx-frontend-ng/src/polyfills.ts",
+            "tsConfig": "apps/wx-frontend-ng/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "apps/wx-frontend-ng/src/favicon.ico",
+              "apps/wx-frontend-ng/src/assets"
+            ],
+            "styles": ["apps/wx-frontend-ng/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/wx-frontend-ng/src/environments/environment.ts",
+                  "with": "apps/wx-frontend-ng/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "wx-frontend-ng:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "wx-frontend-ng:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "wx-frontend-ng:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/wx-frontend-ng/tsconfig.app.json",
+              "apps/wx-frontend-ng/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/wx-frontend-ng/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/wx-frontend-ng/jest.config.js",
+            "tsConfig": "apps/wx-frontend-ng/tsconfig.spec.json",
+            "setupFile": "apps/wx-frontend-ng/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "wx-frontend-ng-e2e": {
+      "root": "apps/wx-frontend-ng-e2e",
+      "sourceRoot": "apps/wx-frontend-ng-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/wx-frontend-ng-e2e/cypress.json",
+            "tsConfig": "apps/wx-frontend-ng-e2e/tsconfig.e2e.json",
+            "devServerTarget": "wx-frontend-ng:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "wx-frontend-ng:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/wx-frontend-ng-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/wx-frontend-ng-e2e/**"]
+          }
+        }
+      }
+    },
+    "wx-frontend": {
+      "root": "apps/wx-frontend",
+      "sourceRoot": "apps/wx-frontend/src",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:build",
+          "options": {
+            "outputPath": "dist/apps/wx-frontend",
+            "index": "apps/wx-frontend/src/index.html",
+            "main": "apps/wx-frontend/src/main.tsx",
+            "polyfills": "apps/wx-frontend/src/polyfills.ts",
+            "tsConfig": "apps/wx-frontend/tsconfig.app.json",
+            "assets": [
+              "apps/wx-frontend/src/favicon.ico",
+              "apps/wx-frontend/src/assets"
+            ],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/babel"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/wx-frontend/src/environments/environment.ts",
+                  "with": "apps/wx-frontend/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "wx-frontend:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "wx-frontend:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/wx-frontend/tsconfig.app.json",
+              "apps/wx-frontend/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/wx-frontend/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/wx-frontend/jest.config.js",
+            "tsConfig": "apps/wx-frontend/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "wx-frontend-e2e": {
+      "root": "apps/wx-frontend-e2e",
+      "sourceRoot": "apps/wx-frontend-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/wx-frontend-e2e/cypress.json",
+            "tsConfig": "apps/wx-frontend-e2e/tsconfig.e2e.json",
+            "devServerTarget": "wx-frontend:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "wx-frontend:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/wx-frontend-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/wx-frontend-e2e/**"]
+          }
+        }
+      }
+    },
+    "wx-backend": {
+      "root": "apps/wx-backend",
+      "sourceRoot": "apps/wx-backend/src",
+      "projectType": "application",
+      "prefix": "wx-backend",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/wx-backend",
+            "main": "apps/wx-backend/src/main.ts",
+            "tsConfig": "apps/wx-backend/tsconfig.app.json",
+            "assets": ["apps/wx-backend/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/wx-backend/src/environments/environment.ts",
+                  "with": "apps/wx-backend/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "wx-backend:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/wx-backend/tsconfig.app.json",
+              "apps/wx-backend/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/wx-backend/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/wx-backend/jest.config.js",
+            "tsConfig": "apps/wx-backend/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "ui": {
+      "root": "libs/ui",
+      "sourceRoot": "libs/ui/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ui/tsconfig.lib.json",
+              "libs/ui/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ui/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/ui/jest.config.js",
+            "tsConfig": "libs/ui/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "shared-data": {
+      "root": "libs/shared/data",
+      "sourceRoot": "libs/shared/data/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/data/tsconfig.lib.json",
+              "libs/shared/data/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/data/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/data/jest.config.js",
+            "tsConfig": "libs/shared/data/tsconfig.spec.json"
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "warnings": {
+      "typescriptMismatch": true,
+      "versionMismatch": true
+    },
+    "defaultCollection": "@nrwl/angular",
+    "packageManager": "npm"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/react": {
+      "application": {
+        "style": "@emotion/styled",
+        "linter": "tslint",
+        "babel": true
+      },
+      "component": {
+        "style": "@emotion/styled"
+      },
+      "library": {
+        "style": "@emotion/styled",
+        "linter": "tslint"
+      }
+    },
+    "@schematics/angular:component": {
+      "style": "scss"
+    },
+    "@nestjs/schematics:controller": {
+      "sourceRoot": "apps",
+      "path": "wx-backend/src/app"
+    }
+  },
+  "defaultProject": "wx-frontend-ng"
 }

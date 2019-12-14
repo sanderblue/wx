@@ -7,5 +7,33 @@
     "tslint.json": "*",
     "nx.json": "*"
   },
-  "projects": {}
+  "projects": {
+    "wx-frontend-ng-e2e": {
+      "tags": []
+    },
+    "wx-frontend-ng": {
+      "tags": []
+    },
+    "wx-frontend": {
+      "tags": []
+    },
+    "wx-frontend-e2e": {
+      "tags": []
+    },
+    "wx-backend": {
+      "tags": []
+    },
+    "ui": {
+      "tags": []
+    },
+    "data": {
+      "tags": ["shared"]
+    },
+    "shared": {
+      "tags": []
+    },
+    "shared-data": {
+      "tags": ["shared"]
+    }
+  }
 }

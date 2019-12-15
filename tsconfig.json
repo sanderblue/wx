@@ -7,42 +7,22 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@wx/ui": [
-        "libs/ui/src/index.ts"
-      ],
-      "@wx/data": [
-        "libs/data/src/index.ts"
-      ],
-      "@wx/shared": [
-        "libs/shared/src/index.ts"
-      ],
-      "@wx/shared/data": [
-        "libs/shared/data/src/index.ts"
-      ],
-      "wx/services": [
-        "libs/backend/services/src"
-      ],
-      "wx/services/*": [
-        "libs/backend/services/src/*"
-      ]
+      "@wx/ui": ["libs/ui/src/index.ts"],
+      "@wx/data": ["libs/data/src/index.ts"],
+      "@wx/shared": ["libs/shared/src/index.ts"],
+      "@wx/shared/data": ["libs/shared/data/src/index.ts"],
+      "@wx/backend/services": ["libs/backend/services/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

@@ -1,2 +1,2 @@
-export * from './services.module';
-export * from './services.service';
+export { ServicesModule } from './lib/services.module';
+export { DataService } from './lib/data/data.service';

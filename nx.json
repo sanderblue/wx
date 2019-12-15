@@ -34,6 +34,9 @@
     },
     "shared-data": {
       "tags": ["shared"]
+    },
+    "backend-services": {
+      "tags": ["backend"]
     }
   }
 }

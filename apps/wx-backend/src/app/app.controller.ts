@@ -27,8 +27,6 @@ export class AppController {
       `${pathToFiles}/data.csv`,
     );
 
-    console.log('Download:', download.path);
-
     const data = await this.dataService.convertCsvFileToJson(download.path);
 
     // console.log('DATA:', data);

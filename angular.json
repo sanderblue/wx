@@ -356,6 +356,85 @@
           }
         }
       }
+    },
+    "wx-backend-cron": {
+      "root": "apps/wx-backend-cron",
+      "sourceRoot": "apps/wx-backend-cron/src",
+      "projectType": "application",
+      "prefix": "wx-backend-cron",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/wx-backend-cron",
+            "main": "apps/wx-backend-cron/src/main.ts",
+            "tsConfig": "apps/wx-backend-cron/tsconfig.app.json",
+            "assets": ["apps/wx-backend-cron/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/wx-backend-cron/src/environments/environment.ts",
+                  "with": "apps/wx-backend-cron/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "wx-backend-cron:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/wx-backend-cron/tsconfig.app.json",
+              "apps/wx-backend-cron/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/wx-backend-cron/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/wx-backend-cron/jest.config.js",
+            "tsConfig": "apps/wx-backend-cron/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "backend-entities": {
+      "root": "libs/backend/entities",
+      "sourceRoot": "libs/backend/entities/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/entities/tsconfig.lib.json",
+              "libs/backend/entities/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/entities/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/entities/jest.config.js",
+            "tsConfig": "libs/backend/entities/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {

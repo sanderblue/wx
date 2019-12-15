@@ -37,6 +37,12 @@
     },
     "backend-services": {
       "tags": ["backend"]
+    },
+    "wx-backend-cron": {
+      "tags": ["backend"]
+    },
+    "backend-entities": {
+      "tags": ["shared", "backend"]
     }
   }
 }

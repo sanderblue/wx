@@ -21,7 +21,8 @@
       "@wx/data": ["libs/data/src/index.ts"],
       "@wx/shared": ["libs/shared/src/index.ts"],
       "@wx/shared/data": ["libs/shared/data/src/index.ts"],
-      "@wx/backend/services": ["libs/backend/services/src/index.ts"]
+      "@wx/backend/services": ["libs/backend/services/src/index.ts"],
+      "@wx/backend/entities": ["libs/backend/entities/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

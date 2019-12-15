@@ -3,28 +3,28 @@ import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 @Entity('snow_depth_observations_daily')
 @Index(
   'location_date',
-  (entity: SnowDepthObservationDaily) => [entity.location, entity.date],
+  (entity: SnowDepthObservationDailyEntity) => [entity.location, entity.date],
   { unique: true },
 )
-export class SnowDepthObservationDaily {
+export class SnowDepthObservationDailyEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Index()
-  @Column()
+  @Column('text')
   location: string;
 
   @Index()
-  @Column()
+  @Column('text')
   date: string;
 
-  @Column()
+  @Column('bigint')
   timestamp: number;
 
-  @Column()
+  @Column('integer')
   elevation: number;
 
-  @Column()
+  @Column('float')
   averageSnowDepthForDate: number;
 
   @Column('text', { array: true })

@@ -7,25 +7,32 @@ import forIn from 'lodash/forIn';
 import toNumber from 'lodash/toNumber';
 import { Injectable } from '@nestjs/common';
 import { CsvService } from '../csv/csv.service';
+import { SnowDepthObservationDailyRepository } from '../repository/snow-depth-observation-daily.repository';
+import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
 
 @Injectable()
 export class DataService {
-  constructor(private readonly csvService: CsvService) {}
+  constructor(
+    private readonly csvService: CsvService,
+    private readonly repository: SnowDepthObservationDailyRepository,
+  ) {}
+
+  public async save(
+    d: SnowDepthObservationDailyEntity[],
+  ): Promise<SnowDepthObservationDailyEntity[]> {
+    const entities = await this.repository.createEntity(d);
+
+    return await this.repository.save(entities);
+  }
 
   public async downloadToFile(url: string, dest: string = './'): Promise<any> {
-    // const response = await axios.get(url);
-
-    // const file = fs.writeFileSync(dest, response.data);
-
-    // return file;
-
     let file = fs.createWriteStream(dest);
 
     return new Promise((resolve: any, reject: any) => {
       file.on('finish', () => {
         file.close();
 
-        console.log('\nFINISHED WRITING TO FILE');
+        console.log('\nFINISHED WRITING CSV TO FILE');
         console.log('\n\n\n');
 
         resolve(file);
@@ -36,13 +43,6 @@ export class DataService {
           responseType: 'stream',
         })
         .then((response: AxiosResponse<fs.WriteStream>) => {
-          console.log('\n***********');
-          console.log('status:', response.status);
-          console.log('status:', response);
-          console.log('resp:', response.data.path);
-
-          // response.data.pipe(file);
-
           const stream = response.data;
 
           stream.on('data', (chunk: ArrayBuffer) => {
@@ -123,36 +123,5 @@ export class DataService {
 
   public convertBuffer(data: Buffer): any {
     return JSON.parse(data.toString('utf8'));
-  }
-
-  public normalizeJson(data) {
-    let observationsData: any[] = [];
-    let observationDateTime: Date;
-    let observationTimestamp: number;
-
-    forIn(data, (value, key) => {
-      let elevation: string;
-      let location: string;
-      let snowDepth: string;
-
-      if (this.csvService.isDateTimeKey(key)) {
-        observationDateTime = new Date(value);
-        observationTimestamp = observationDateTime.getTime();
-      } else {
-        elevation = this.csvService.extractNumberFromKey(key);
-        location = this.csvService.extractStringFromKey(key);
-        snowDepth = value;
-
-        observationsData.push({
-          timestamp: observationTimestamp,
-          date: moment(observationDateTime).format('YYYY-MM-DD'),
-          location: location,
-          elevation: toNumber(elevation),
-          snowDepth: toNumber(value),
-        });
-      }
-    });
-
-    return observationsData;
   }
 }

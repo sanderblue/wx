@@ -1,2 +1,2 @@
-export { SnowDepthObservationHourly } from './lib/snow-depth-observation-hourly.entity';
-export { SnowDepthObservationDaily } from './lib/snow-depth-observation-daily.entity';
+export { SnowDepthObservationHourlyEntity } from './lib/snow-depth-observation-hourly.entity';
+export { SnowDepthObservationDailyEntity } from './lib/snow-depth-observation-daily.entity';

@@ -1,14 +1,17 @@
 import fs from 'fs';
 import { Injectable } from '@nestjs/common';
 import { Cron, NestSchedule } from 'nest-schedule';
-import { DataService } from '@wx/backend/services';
+import { DataService, DataAggregatorService } from '@wx/backend/services';
 
 @Injectable()
 export class SnowCronService extends NestSchedule {
   private readonly url: string =
     'https://www.nwac.us/data-portal/csv/location/mt-hood/sensortype/snow_depth/start-date/2014-01-01/end-date/2019-12-15/';
 
-  constructor(private readonly dataService: DataService) {
+  constructor(
+    private readonly dataService: DataService,
+    private readonly dataAggregator: DataAggregatorService,
+  ) {
     super();
   }
 
@@ -18,7 +21,7 @@ export class SnowCronService extends NestSchedule {
     immediate: true,
   })
   async cronJob() {
-    console.log('executing cron job');
+    console.log('cron job: start', `${__dirname}/assets`);
 
     const pathToFiles = `${__dirname}/assets`;
 
@@ -28,11 +31,19 @@ export class SnowCronService extends NestSchedule {
     );
 
     const data = await this.dataService.convertCsvFileToJson(result.path);
+    const dailyData = this.dataAggregator.aggregateDailySnowDepthData(data);
 
-    const jsonString = JSON.stringify(data);
+    console.log('Daily Data:', dailyData[0]);
 
-    fs.writeFileSync(`${pathToFiles}/data.json`, jsonString);
+    const dailyResult = JSON.stringify(dailyData);
 
-    console.log('CRON Result:', result);
+    fs.writeFileSync(
+      `${pathToFiles}/snow-depth-observations-daily.json`,
+      dailyResult,
+    );
+
+    this.dataService.save(dailyData);
+
+    console.log('cron job: end');
   }
 }

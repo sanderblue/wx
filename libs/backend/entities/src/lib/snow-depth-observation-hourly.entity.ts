@@ -1,24 +1,24 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity('snow_depth_observations_hourly')
-export class SnowDepthObservationHourly {
+export class SnowDepthObservationHourlyEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Index()
-  @Column()
+  @Column('text')
   location: string;
 
   @Index()
-  @Column()
+  @Column('text')
   date: string;
 
-  @Column()
+  @Column('bigint')
   timestamp: number;
 
-  @Column()
+  @Column('integer')
   elevation: number;
 
-  @Column()
+  @Column('float')
   snowDepth: number;
 }

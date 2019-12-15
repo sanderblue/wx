@@ -1,4 +1,5 @@
 import fs from 'fs';
+import moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { Cron, NestSchedule } from 'nest-schedule';
 import { DataService, DataAggregatorService } from '@wx/backend/services';
@@ -26,15 +27,12 @@ export class SnowCronService extends NestSchedule {
     const pathToFiles = `${__dirname}/assets`;
 
     const result = await this.dataService.downloadToFile(
-      this.url,
+      this.getSnowDepthUrl(new Date(), new Date()),
       `${pathToFiles}/data.csv`,
     );
 
     const data = await this.dataService.convertCsvFileToJson(result.path);
     const dailyData = this.dataAggregator.aggregateDailySnowDepthData(data);
-
-    console.log('Daily Data:', dailyData[0]);
-
     const dailyResult = JSON.stringify(dailyData);
 
     fs.writeFileSync(
@@ -42,8 +40,23 @@ export class SnowCronService extends NestSchedule {
       dailyResult,
     );
 
-    this.dataService.save(dailyData);
+    try {
+      this.dataService.save(dailyData);
+    } catch (error) {
+      console.error('Error caught:', error.message);
+    }
 
     console.log('cron job: end');
+  }
+
+  private getSnowDepthUrl(startDate: Date, endDate: Date): string {
+    const startDateFormatted = moment(startDate).format('YYYY-MM-DD');
+    const endDateFormatted = moment(endDate).format('YYYY-MM-DD');
+
+    console.log(
+      `Fetching snow observation data for date range: ${startDateFormatted} to ${endDateFormatted}`,
+    );
+
+    return `https://www.nwac.us/data-portal/csv/location/mt-hood/sensortype/snow_depth/start-date/${startDateFormatted}/end-date/${endDateFormatted}/`;
   }
 }

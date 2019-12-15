@@ -20,9 +20,9 @@ export class DataService {
   public async save(
     d: SnowDepthObservationDailyEntity[],
   ): Promise<SnowDepthObservationDailyEntity[]> {
-    const entities = await this.repository.createEntity(d);
+    const entities = await this.repository.create(d);
 
-    return await this.repository.save(entities);
+    return await this.repository.saveNew(entities);
   }
 
   public async downloadToFile(url: string, dest: string = './'): Promise<any> {
@@ -31,10 +31,6 @@ export class DataService {
     return new Promise((resolve: any, reject: any) => {
       file.on('finish', () => {
         file.close();
-
-        console.log('\nFINISHED WRITING CSV TO FILE');
-        console.log('\n\n\n');
-
         resolve(file);
       });
 
@@ -46,8 +42,6 @@ export class DataService {
           const stream = response.data;
 
           stream.on('data', (chunk: ArrayBuffer) => {
-            console.log('streaming data...');
-
             file.write(new Buffer(chunk));
           });
 

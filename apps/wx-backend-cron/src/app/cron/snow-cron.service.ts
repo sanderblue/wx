@@ -6,9 +6,6 @@ import { DataService, DataAggregatorService } from '@wx/backend/services';
 
 @Injectable()
 export class SnowCronService extends NestSchedule {
-  private readonly url: string =
-    'https://www.nwac.us/data-portal/csv/location/mt-hood/sensortype/snow_depth/start-date/2014-01-01/end-date/2019-12-15/';
-
   constructor(
     private readonly dataService: DataService,
     private readonly dataAggregator: DataAggregatorService,
@@ -27,7 +24,7 @@ export class SnowCronService extends NestSchedule {
     const pathToFiles = `${__dirname}/assets`;
 
     const result = await this.dataService.downloadToFile(
-      this.getSnowDepthUrl(new Date(), new Date()),
+      this.getSnowDepthUrl(new Date('2019-12-15'), new Date()),
       `${pathToFiles}/data.csv`,
     );
 

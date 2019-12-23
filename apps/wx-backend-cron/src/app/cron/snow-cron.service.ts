@@ -13,7 +13,7 @@ export class SnowCronService extends NestSchedule {
     super();
   }
 
-  @Cron('* * * * *', {
+  @Cron('*/30 * * * *', {
     startTime: new Date(),
     endTime: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
     immediate: true,
@@ -24,26 +24,29 @@ export class SnowCronService extends NestSchedule {
     const pathToFiles = `${__dirname}/assets`;
 
     const result = await this.dataService.downloadToFile(
-      this.getSnowDepthUrl(new Date('2019-12-15'), new Date()),
+      this.getSnowDepthUrl(new Date('2014-01-01'), new Date()),
       `${pathToFiles}/data.csv`,
     );
 
     const data = await this.dataService.convertCsvFileToJson(result.path);
+
+    // console.log('CONVERTED CSV TO JSON:', data);
+
     const dailyData = this.dataAggregator.aggregateDailySnowDepthData(data);
     const dailyResult = JSON.stringify(dailyData);
+    const filePath = `${pathToFiles}/snow-depth-observations-daily.json`;
 
-    fs.writeFileSync(
-      `${pathToFiles}/snow-depth-observations-daily.json`,
-      dailyResult,
-    );
+    fs.writeFileSync(filePath, dailyResult);
+
+    console.log('CONVERTED CSV TO JSON:', filePath);
 
     try {
-      this.dataService.save(dailyData);
+      await this.dataService.save(dailyData);
+
+      console.log('cron job: end');
     } catch (error) {
       console.error('Error caught:', error.message);
     }
-
-    console.log('cron job: end');
   }
 
   private getSnowDepthUrl(startDate: Date, endDate: Date): string {

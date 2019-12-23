@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import * as http from 'http';
 import * as moment from 'moment';
 import * as csv from 'csvtojson';
 import axios, { AxiosResponse } from 'axios';
@@ -63,13 +62,20 @@ export class DataService {
     let observationsData: any[] = [];
 
     return new Promise((resolve, reject) => {
-      csv()
+      csv({
+        flatKeys: true,
+      })
         .fromFile(filePath)
+        .preFileLine((fileLineString) => {
+          return fileLineString.replace(/"" -/gi, '');
+        })
         .on('data', (data: Buffer) => {
           const row = this.convertBuffer(data);
           const rowData = this.processDataRow(row);
 
-          observationsData.push(rowData);
+          rowData.forEach((d) => {
+            observationsData.push(d);
+          });
         })
         .on('end', () => {
           console.log('Finished converting to JSON.');
@@ -83,10 +89,10 @@ export class DataService {
     });
   }
 
-  private processDataRow(row: any): { [key: string]: any } {
+  private processDataRow(row: any): any[] {
     let observationDateTime: Date;
     let observationTimestamp: number;
-    let d = {};
+    let d = [];
 
     // consider map, reduce, etc
     forIn(row, (value, key) => {
@@ -102,13 +108,13 @@ export class DataService {
         location = this.csvService.extractStringFromKey(key);
         snowDepth = value;
 
-        d = {
+        d.push({
           timestamp: observationTimestamp,
           date: moment(observationDateTime).format('YYYY-MM-DD'),
           location: location,
           elevation: toNumber(elevation),
           snowDepth: toNumber(snowDepth),
-        };
+        });
       }
     });
 

@@ -140,7 +140,8 @@
             "tsConfig": "apps/wx-frontend/tsconfig.app.json",
             "assets": [
               "apps/wx-frontend/src/favicon.ico",
-              "apps/wx-frontend/src/assets"
+              "apps/wx-frontend/src/assets",
+              "apps/wx-frontend/src/assets/data/data.json"
             ],
             "styles": [],
             "scripts": [],
@@ -174,6 +175,9 @@
         "serve": {
           "builder": "@nrwl/web:dev-server",
           "options": {
+            "ssl": true,
+            "sslKey": "apps/wx-frontend/src/assets/server.key",
+            "sslCert": "apps/wx-frontend/src/assets/server.crt",
             "buildTarget": "wx-frontend:build"
           },
           "configurations": {
@@ -475,5 +479,5 @@
       "path": "wx-backend/src/app"
     }
   },
-  "defaultProject": "wx-frontend-ng"
+  "defaultProject": "wx-frontend"
 }

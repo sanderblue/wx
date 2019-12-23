@@ -41,9 +41,13 @@ export class DataAggregatorService {
   public aggregateDailySnowDepthData(data) {
     const locations = this.extractLocationsFromData(data);
 
+    console.log('Locations:', locations);
+
     let arraysOfData: any[] = [];
     let aggregatedData: SnowDepthObservationDailyEntity[];
     let groupedByLocation = groupBy(data, 'location');
+
+    console.log('GROUPED:', Object.keys(groupedByLocation));
 
     forIn(
       groupedByLocation,
@@ -52,8 +56,6 @@ export class DataAggregatorService {
           locationData,
           location,
         );
-
-        // console.log('dailyDataResult', dailyDataResult);
 
         arraysOfData.push(dailyDataResult);
       },

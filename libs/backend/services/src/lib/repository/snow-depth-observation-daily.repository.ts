@@ -10,27 +10,28 @@ export class SnowDepthObservationDailyRepository {
     private readonly repository: Repository<SnowDepthObservationDailyEntity>,
   ) {}
 
+  public async find(): Promise<any[]> {
+    return this.repository.find();
+  }
+
   public async create(
     d: SnowDepthObservationDailyEntity[],
   ): Promise<SnowDepthObservationDailyEntity[]> {
-    return await this.repository.create(d);
+    return this.repository.create(d);
   }
 
   public async save(
     d: SnowDepthObservationDailyEntity[],
   ): Promise<SnowDepthObservationDailyEntity[]> {
     const entities = await this.repository.create(d);
-    const result = await this.repository.save(entities);
 
-    return result;
+    return this.repository.save(entities);
   }
 
   public async saveOne(
     d: SnowDepthObservationDailyEntity,
   ): Promise<SnowDepthObservationDailyEntity> {
-    const result = await this.repository.save(d);
-
-    return result;
+    return this.repository.save(d);
   }
 
   public async saveNew(
@@ -44,6 +45,7 @@ export class SnowDepthObservationDailyRepository {
         });
 
         if (!exists) {
+          console.log('Saving new entity:', s);
           return this.saveOne(s);
         }
       }),

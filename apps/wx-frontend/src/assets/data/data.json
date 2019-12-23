@@ -1,11 +1,35 @@
 [
   {
+    "timestamp": 1576972800000,
+    "date": "2019-12-22",
+    "location": "TimberlineLodge",
+    "elevation": 6000,
+    "averageSnowDepthForDate": 30.78,
+    "hourlyObservations": [
+      31.42,
+      31.54,
+      30.28,
+      30.61,
+      29.95,
+      30.74,
+      31.14,
+      31.01,
+      31.54,
+      29.88,
+      30.52
+    ]
+  },
+  {
     "timestamp": 1576886400000,
     "date": "2019-12-21",
     "location": "TimberlineLodge",
     "elevation": 6000,
-    "averageSnowDepthForDate": 31.13,
+    "averageSnowDepthForDate": 30.89,
     "hourlyObservations": [
+      30.04,
+      30.3,
+      30.51,
+      30.74,
       30.81,
       30.82,
       30.9,
@@ -14,11 +38,9 @@
       31.05,
       31.25,
       31.31,
-      31.51,
       31.05,
       30.85,
-      31.38,
-      31.51
+      31.38
     ]
   },
   {

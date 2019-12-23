@@ -9,12 +9,13 @@ const httpsOptions = {
   key: fs.readFileSync(__dirname + '/assets/server.key'),
   cert: fs.readFileSync(__dirname + '/assets/server.crt'),
   requestCert: false,
-  rejectUnauthorized: false
+  rejectUnauthorized: false,
 };
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    httpsOptions
+    httpsOptions,
+    cors: true,
   });
 
   const globalPrefix = 'api';

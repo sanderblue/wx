@@ -1,1 +1,1 @@
-// export * from './lib/shared-data';
+export * from './lib/shared-data';

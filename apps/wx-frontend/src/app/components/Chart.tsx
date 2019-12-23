@@ -1,110 +1,100 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from '@emotion/styled';
+import groupBy from 'lodash/groupBy';
+import orderBy from 'lodash/orderBy';
+import { SnowDepthObservationDaily } from '@wx/shared/data';
+import axios, { AxiosResponse } from 'axios';
+import ApexCharts, { ApexOptions } from 'apexcharts';
 
 /* eslint-disable-next-line */
 export interface ChartProps {}
 
 const StyledChart = styled.div`
-  color: pink;
+  color: #999;
 `;
 
-class Chart extends React.Component {
-  state: any;
+export default function Chart() {
+  // const [data, setData] = useState([]);
+  const [chartOptions, setChartOptions] = useState({});
+  const [chartSeries, setChartSeries] = useState([]);
 
-  constructor(props) {
-    super(props);
+  async function fetchData() {
+    const response = await axios.get('https://localhost:3333/api/snow/depth');
+    const result = response.data;
 
-    this.state = {
+    console.log('result:', result);
+
+    const grouped = groupByLocation(result);
+    const dataSeries = orderBy(
+      grouped.MtHoodMeadowsBase,
+      ['timestamp'],
+      ['desc'],
+    );
+
+    // console.log('dataSeries:', dataSeries);
+
+    const series = [
+      {
+        name: 'MtHoodMeadows',
+        data: dataSeries.map((o) => o.averageSnowDepthForDate).reverse(),
+      },
+    ];
+
+    const dates = dataSeries.map((o) => o.date).reverse();
+
+    // console.log('SERIES:', series);
+
+    const state = {
       options: {
         chart: {
-          shadow: {
-            enabled: true,
-            color: '#000',
-            top: 18,
-            left: 7,
-            blur: 10,
-            opacity: 1,
-          },
-          toolbar: {
-            show: false,
-          },
-        },
-        colors: ['#77B6EA', '#545454'],
-        dataLabels: {
-          enabled: true,
-        },
-        stroke: {
-          curve: 'smooth',
+          height: 400,
+          type: 'line',
         },
         title: {
-          text: 'Average High & Low Temperature',
-          align: 'left',
-        },
-        grid: {
-          borderColor: '#e7e7e7',
-          row: {
-            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-            opacity: 0.5,
-          },
-        },
-        markers: {
-          size: 6,
+          text: 'Snow Depth',
+          align: 'center',
         },
         xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-          title: {
-            text: 'Month',
-          },
+          type: 'datetime',
+          categories: dates,
         },
         yaxis: {
-          title: {
-            text: 'Temperature',
+          tooltip: {
+            enabled: true,
           },
-          min: 5,
-          max: 40,
         },
-        legend: {
-          position: 'top',
-          horizontalAlign: 'right',
-          floating: true,
-          offsetY: -25,
-          offsetX: -5,
-        },
+        plotOptions: {},
       },
-      series: [
-        {
-          name: 'High - 2013',
-          data: [28, 29, 33, 36, 32, 32, 33],
-        },
-        {
-          name: 'Low - 2013',
-          data: [12, 11, 14, 18, 17, 13, 13],
-        },
-      ],
+      series,
     };
+
+    // setData(result);
+    setChartOptions(state.options);
+    setChartSeries(state.series);
   }
 
-  render() {
-    return (
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <StyledChart>
+      <h1>Welcome to chart component!</h1>
+
       <div id="chart">
-        <ReactApexChart
-          options={this.state.options}
-          series={this.state.series}
-          type="line"
-          height="350"
-        />
+        <ReactApexChart options={chartOptions} series={chartSeries} />
       </div>
-    );
-  }
+
+      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+    </StyledChart>
+  );
 }
 
-// export const Chart = (props: ChartProps) => {
-//   return (
-//     <StyledChart>
-//       <h1>Welcome to chart component!</h1>
-//     </StyledChart>
-//   );
-// };
+function groupByLocation(data: SnowDepthObservationDaily[]) {
+  const grouped = groupBy(data, 'location');
 
-export default Chart;
+  console.log('GROUPED', grouped);
+
+  return grouped;
+}

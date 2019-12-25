@@ -8,6 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    // "esModuleInterop": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
@@ -22,7 +23,8 @@
       "@wx/shared": ["libs/shared/src/index.ts"],
       "@wx/shared/data": ["libs/shared/data/src/index.ts"],
       "@wx/backend/services": ["libs/backend/services/src/index.ts"],
-      "@wx/backend/entities": ["libs/backend/entities/src/index.ts"]
+      "@wx/backend/entities": ["libs/backend/entities/src/index.ts"],
+      "@wx/backend/graphql": ["libs/backend/graphql/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

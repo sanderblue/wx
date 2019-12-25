@@ -442,6 +442,31 @@
           }
         }
       }
+    },
+    "backend-graphql": {
+      "root": "libs/backend/graphql",
+      "sourceRoot": "libs/backend/graphql/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/backend/graphql/tsconfig.lib.json",
+              "libs/backend/graphql/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/backend/graphql/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/backend/graphql/jest.config.js",
+            "tsConfig": "libs/backend/graphql/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {

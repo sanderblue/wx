@@ -1,5 +1,7 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
 import toSafeInteger from 'lodash/toSafeInteger';
 
 import { AppController } from './app.controller';
@@ -7,6 +9,7 @@ import { AppService } from './app.service';
 import { ServicesModule, DataService } from '@wx/backend/services';
 import { SnowController } from './snow/snow.controller';
 import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
+import { AppGraphQLModule } from '@wx/backend/graphql';
 
 @Module({
   imports: [
@@ -22,6 +25,11 @@ import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
       synchronize: process.env.ENVIRONMENT === 'production' ? false : true,
       ssl: true,
     }),
+    GraphQLModule.forRoot({
+      installSubscriptionHandlers: true,
+      autoSchemaFile: 'schema.gql',
+    }),
+    AppGraphQLModule,
   ],
   controllers: [AppController, SnowController],
   providers: [AppService, DataService],

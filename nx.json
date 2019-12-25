@@ -43,6 +43,9 @@
     },
     "backend-entities": {
       "tags": ["shared", "backend"]
+    },
+    "backend-graphql": {
+      "tags": []
     }
   }
 }

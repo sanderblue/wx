@@ -12,8 +12,8 @@ export class SnowDepthObservationDailyRepository {
 
   public async find(
     conditions: FindConditions<Partial<SnowDepthObservationDailyEntity>> = {},
-  ): Promise<any[]> {
-    return this.repository.find();
+  ): Promise<SnowDepthObservationDailyEntity[]> {
+    return this.repository.find(conditions);
   }
 
   public async create(

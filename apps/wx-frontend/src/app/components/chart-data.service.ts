@@ -21,25 +21,6 @@ export function getDataForDateRange(
   });
 }
 
-export class ChartDataService {
-  constructor() {}
-
-  public groupByLocation(
-    data: SnowDepthObservationDaily[],
-  ): Dictionary<SnowDepthObservationDaily[]> {
-    return groupBy(data, 'location');
-  }
-
-  public getDataForDateRange(
-    data: SnowDepthObservationDaily[],
-    startDate: Date,
-    endDate: Date,
-  ) {
-    const startTimestamp = new Date(startDate).getTime();
-    const endTimestamp = new Date(endDate).getTime();
-
-    return data.filter((item) => {
-      return item.timestamp >= startTimestamp && item.timestamp <= endTimestamp;
-    });
-  }
+export function getNurmericalSeriesData<T>(data: T[], key: string): number[] {
+  return data.map((o) => o[key]).reverse();
 }

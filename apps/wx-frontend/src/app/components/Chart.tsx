@@ -7,6 +7,11 @@ import { SnowDepthObservationDaily } from '@wx/shared/data';
 import axios, { AxiosResponse } from 'axios';
 import ApexCharts, { ApexOptions } from 'apexcharts';
 import { Dictionary } from 'lodash';
+import {
+  groupByLocation,
+  getDataForDateRange,
+  getNurmericalSeriesData,
+} from './chart-data.service';
 
 /* eslint-disable-next-line */
 export interface ChartProps {}
@@ -15,6 +20,8 @@ const StyledChart = styled.div`
   color: #999;
 `;
 
+const locations = ['mt-hood', 'crystal', 'mt-baker-ski-area'];
+
 export default function Chart() {
   const [chartOptions, setChartOptions] = useState({});
   const [chartSeries, setChartSeries] = useState([]);
@@ -22,12 +29,8 @@ export default function Chart() {
   async function fetchData() {
     const response = await axios.get('https://localhost:3333/api/snow/depth');
     const result = response.data;
-
     const grouped = groupByLocation(result);
     const dataSet = orderBy(grouped.MtHoodMeadowsBase, ['timestamp'], ['desc']);
-
-    // console.log('dataSeries:', dataSeries);
-
     const dataSeries = getDataForDateRange(
       dataSet,
       new Date('2019-011-01'),
@@ -37,7 +40,10 @@ export default function Chart() {
     const series = [
       {
         name: 'MtHoodMeadows',
-        data: dataSeries.map((o) => o.averageSnowDepthForDate).reverse(),
+        data: getNurmericalSeriesData<SnowDepthObservationDaily>(
+          dataSeries,
+          'averageSnowDepthForDate',
+        ),
       },
     ];
 
@@ -69,7 +75,6 @@ export default function Chart() {
       series,
     };
 
-    // setData(result);
     setChartOptions(state.options);
     setChartSeries(state.series);
   }
@@ -85,27 +90,6 @@ export default function Chart() {
       <div id="chart">
         <ReactApexChart options={chartOptions} series={chartSeries} />
       </div>
-
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
     </StyledChart>
   );
-}
-
-function groupByLocation(
-  data: SnowDepthObservationDaily[],
-): Dictionary<SnowDepthObservationDaily[]> {
-  return groupBy(data, 'location');
-}
-
-function getDataForDateRange(
-  data: SnowDepthObservationDaily[],
-  startDate: Date,
-  endDate: Date,
-) {
-  const startTimestamp = new Date(startDate).getTime();
-  const endTimestamp = new Date(endDate).getTime();
-
-  return data.filter((item) => {
-    return item.timestamp >= startTimestamp && item.timestamp <= endTimestamp;
-  });
 }

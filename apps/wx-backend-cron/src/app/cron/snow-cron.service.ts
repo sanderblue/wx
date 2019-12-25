@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { Cron, NestSchedule } from 'nest-schedule';
 import { DataService, DataAggregatorService } from '@wx/backend/services';
 
+type LocationString = 'mt-hood' | 'crystal' | 'mt-baker-ski-area';
+
 @Injectable()
 export class SnowCronService extends NestSchedule {
   constructor(
@@ -19,12 +21,18 @@ export class SnowCronService extends NestSchedule {
     immediate: true,
   })
   async cronJob() {
-    console.log('cron job: start', `${__dirname}/assets`);
+    const location: LocationString = 'mt-baker-ski-area';
+    const startDate = new Date('2014-01-01');
+    const endDate = new Date('2019-12-26');
+
+    console.log(
+      `\ncron job: start | location: ${location} | startDate: ${startDate} | endDate: ${endDate}\n`,
+    );
 
     const pathToFiles = `${__dirname}/assets`;
 
     const result = await this.dataService.downloadToFile(
-      this.getSnowDepthUrl(new Date('2019-12-01'), new Date()),
+      this.getSnowDepthUrl(location, startDate, endDate),
       `${pathToFiles}/data.csv`,
     );
 
@@ -34,7 +42,7 @@ export class SnowCronService extends NestSchedule {
 
     const dailyData = this.dataAggregator.aggregateDailySnowDepthData(data);
     const dailyResult = JSON.stringify(dailyData);
-    const filePath = `${pathToFiles}/snow-depth-observations-daily.json`;
+    const filePath = `${pathToFiles}/snow-depth-observations-daily-${location}.json`;
 
     fs.writeFileSync(filePath, dailyResult);
 
@@ -49,7 +57,11 @@ export class SnowCronService extends NestSchedule {
     }
   }
 
-  private getSnowDepthUrl(startDate: Date, endDate: Date): string {
+  private getSnowDepthUrl(
+    location: LocationString,
+    startDate: Date,
+    endDate: Date,
+  ): string {
     const startDateFormatted = moment(startDate).format('YYYY-MM-DD');
     const endDateFormatted = moment(endDate).format('YYYY-MM-DD');
 
@@ -57,6 +69,8 @@ export class SnowCronService extends NestSchedule {
       `Fetching snow observation data for date range: ${startDateFormatted} to ${endDateFormatted}`,
     );
 
-    return `https://www.nwac.us/data-portal/csv/location/mt-hood/sensortype/snow_depth/start-date/${startDateFormatted}/end-date/${endDateFormatted}/`;
+    return `https://www.nwac.us/data-portal/csv/location/${location}/sensortype/snow_depth/start-date/${startDateFormatted}/end-date/${endDateFormatted}/`;
   }
 }
+
+// https://www.nwac.us/data-portal/csv/location/crystal/sensortype/snow_depth/start-date/2019-01-01/end-date/2019-12-25/

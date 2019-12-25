@@ -24,7 +24,7 @@ export class SnowCronService extends NestSchedule {
     const pathToFiles = `${__dirname}/assets`;
 
     const result = await this.dataService.downloadToFile(
-      this.getSnowDepthUrl(new Date('2014-01-01'), new Date()),
+      this.getSnowDepthUrl(new Date('2019-12-01'), new Date()),
       `${pathToFiles}/data.csv`,
     );
 

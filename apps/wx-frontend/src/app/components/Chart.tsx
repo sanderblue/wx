@@ -6,6 +6,7 @@ import orderBy from 'lodash/orderBy';
 import { SnowDepthObservationDaily } from '@wx/shared/data';
 import axios, { AxiosResponse } from 'axios';
 import ApexCharts, { ApexOptions } from 'apexcharts';
+import { Dictionary } from 'lodash';
 
 /* eslint-disable-next-line */
 export interface ChartProps {}
@@ -15,7 +16,6 @@ const StyledChart = styled.div`
 `;
 
 export default function Chart() {
-  // const [data, setData] = useState([]);
   const [chartOptions, setChartOptions] = useState({});
   const [chartSeries, setChartSeries] = useState([]);
 
@@ -23,16 +23,16 @@ export default function Chart() {
     const response = await axios.get('https://localhost:3333/api/snow/depth');
     const result = response.data;
 
-    console.log('result:', result);
-
     const grouped = groupByLocation(result);
-    const dataSeries = orderBy(
-      grouped.MtHoodMeadowsBase,
-      ['timestamp'],
-      ['desc'],
-    );
+    const dataSet = orderBy(grouped.MtHoodMeadowsBase, ['timestamp'], ['desc']);
 
     // console.log('dataSeries:', dataSeries);
+
+    const dataSeries = getDataForDateRange(
+      dataSet,
+      new Date('2019-011-01'),
+      new Date(),
+    );
 
     const series = [
       {
@@ -91,10 +91,21 @@ export default function Chart() {
   );
 }
 
-function groupByLocation(data: SnowDepthObservationDaily[]) {
-  const grouped = groupBy(data, 'location');
+function groupByLocation(
+  data: SnowDepthObservationDaily[],
+): Dictionary<SnowDepthObservationDaily[]> {
+  return groupBy(data, 'location');
+}
 
-  console.log('GROUPED', grouped);
+function getDataForDateRange(
+  data: SnowDepthObservationDaily[],
+  startDate: Date,
+  endDate: Date,
+) {
+  const startTimestamp = new Date(startDate).getTime();
+  const endTimestamp = new Date(endDate).getTime();
 
-  return grouped;
+  return data.filter((item) => {
+    return item.timestamp >= startTimestamp && item.timestamp <= endTimestamp;
+  });
 }

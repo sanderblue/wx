@@ -10,7 +10,9 @@ export class SnowDepthObservationDailyRepository {
     private readonly repository: Repository<SnowDepthObservationDailyEntity>,
   ) {}
 
-  public async find(): Promise<any[]> {
+  public async find(
+    conditions: FindConditions<Partial<SnowDepthObservationDailyEntity>> = {},
+  ): Promise<any[]> {
     return this.repository.find();
   }
 
@@ -45,7 +47,6 @@ export class SnowDepthObservationDailyRepository {
         });
 
         if (!exists) {
-          console.log('Saving new entity:', s);
           return this.saveOne(s);
         }
       }),

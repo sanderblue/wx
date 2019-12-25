@@ -245,7 +245,8 @@
             "outputPath": "dist/apps/wx-backend",
             "main": "apps/wx-backend/src/main.ts",
             "tsConfig": "apps/wx-backend/tsconfig.app.json",
-            "assets": ["apps/wx-backend/src/assets"]
+            "assets": ["apps/wx-backend/src/assets"],
+            "port": 8888
           },
           "configurations": {
             "production": {
@@ -264,7 +265,8 @@
         "serve": {
           "builder": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "wx-backend:build"
+            "buildTarget": "wx-backend:build",
+            "port": 8888
           }
         },
         "lint": {
@@ -393,7 +395,8 @@
         "serve": {
           "builder": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "wx-backend-cron:build"
+            "buildTarget": "wx-backend-cron:build",
+            "port": 4444
           }
         },
         "lint": {

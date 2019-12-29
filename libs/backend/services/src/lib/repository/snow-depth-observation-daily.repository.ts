@@ -16,6 +16,12 @@ export class SnowDepthObservationDailyRepository {
     return this.repository.find(conditions);
   }
 
+  public async findWhere(
+    conditions: any,
+  ): Promise<SnowDepthObservationDailyEntity[]> {
+    return this.repository.find(conditions);
+  }
+
   public async create(
     d: SnowDepthObservationDailyEntity[],
   ): Promise<SnowDepthObservationDailyEntity[]> {

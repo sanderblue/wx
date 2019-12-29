@@ -27,8 +27,8 @@ export class SnowDepthObservation {
 
 @ObjectType()
 export class SnowDepthObservations {
-  @Field()
-  location: string;
+  @Field((type) => [String])
+  locations: string[];
 
   @Field((type) => [SnowDepthObservation])
   observations: SnowDepthObservation[];

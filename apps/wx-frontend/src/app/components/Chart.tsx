@@ -2,21 +2,24 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from '@emotion/styled';
 import orderBy from 'lodash/orderBy';
+import groupBy from 'lodash/groupBy';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import {
   getDataForDateRange,
   getNurmericalSeriesData,
+  groupByLocation,
 } from './chart-data.service';
 import { SnowDepthObservationDaily } from '@wx/shared/data';
+import { ApexOptions } from 'apexcharts';
 
 const SnowChart = styled.div`
   color: #888;
 `;
 
 const GET_OBSERVATIONS = gql`
-  query getObservations($location: String!) {
-    observations(location: $location) {
+  query getObservations($locations: [String!]!) {
+    observations(locations: $locations) {
       location
       date
       averageSnowDepthForDate
@@ -24,10 +27,21 @@ const GET_OBSERVATIONS = gql`
   }
 `;
 
+interface State {
+  options: ApexOptions;
+  series: ApexAxisChartSeries;
+}
+
 export const Chart = () => {
+  const locations = [
+    'MtHoodMeadowsBase',
+    'TimberlineLodge',
+    'MtBakerHeatherMeadows',
+  ];
+
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
-      location: 'MtHoodMeadowsBase',
+      locations,
     },
   });
 
@@ -42,38 +56,67 @@ export const Chart = () => {
   }
 
   const obs: any[] = data ? data.observations : [];
-  const dataSet = orderBy(obs, ['date'], ['desc']);
-  const dataSeries = getDataForDateRange(
-    dataSet,
-    new Date('2019-011-01'),
-    new Date(),
-  );
-  const dates = dataSeries.map((o) => o.date).reverse();
 
-  console.log('dataSeries:', dataSeries);
+  let dates = [];
 
-  const series = [
-    {
-      name: 'MtHoodMeadows',
+  const seriez = locations.map((location) => {
+    const matched = obs.filter(
+      (d: SnowDepthObservationDaily) => d.location === location,
+    );
+    const dataSet = orderBy(matched, ['date'], ['desc']);
+    const dataSeries = getDataForDateRange(
+      dataSet,
+      new Date('2019-011-20'),
+      new Date(),
+    );
+
+    if (!data.length) {
+      dates = dataSeries.map((o) => o.date).reverse();
+    }
+
+    return {
+      name: location,
       data: getNurmericalSeriesData<SnowDepthObservationDaily>(
         dataSeries,
         'averageSnowDepthForDate',
       ),
-    },
-  ];
+    };
+  });
 
-  const chartOptions = {
-    options: {
-      chart: {
-        id: 'basic-line',
-        height: 400,
-        type: 'line',
-      },
-      xaxis: {
-        categories: dates,
+  // const series = [
+  //   {
+  //     name: 'MtHoodMeadows',
+  //     data: getNurmericalSeriesData<SnowDepthObservationDaily>(
+  //       dataSeries,
+  //       'averageSnowDepthForDate',
+  //     ),
+  //   },
+  // ];
+
+  const chartOptions: ApexOptions = {
+    chart: {
+      id: 'basic-line',
+      height: 400,
+      type: 'line',
+      fontFamily: 'Avenir',
+    },
+    xaxis: {
+      categories: dates,
+      type: 'datetime',
+      labels: {
+        formatter: (value) => {
+          return new Date(value).toLocaleDateString();
+        },
       },
     },
-    series,
+    stroke: {
+      curve: 'stepline',
+    },
+  };
+
+  const state: State = {
+    options: chartOptions,
+    series: seriez,
   };
 
   return (
@@ -82,10 +125,7 @@ export const Chart = () => {
         <h1>Welcome to chart component!</h1>
 
         <div id="chart">
-          <ReactApexChart
-            options={chartOptions.options}
-            series={chartOptions.series}
-          />
+          <ReactApexChart options={state.options} series={state.series} />
         </div>
       </SnowChart>
     </div>

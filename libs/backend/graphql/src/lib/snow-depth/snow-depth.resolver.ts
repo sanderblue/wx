@@ -12,7 +12,22 @@ export class SnowDepthResolver {
   ) {}
 
   @Query((returns) => [SnowDepthObservation])
-  async observations(@Args('location') location: string) {
-    return await this.snowRepository.find({ location });
+  async observations(
+    @Args({ name: 'locations', type: () => [String] })
+    locations: string[] = [],
+  ) {
+    console.log('\n********************');
+    console.log('LOCATIONS:', locations);
+    console.log('********************\n');
+
+    const query = locations.map((v) => {
+      return {
+        location: v,
+      };
+    });
+
+    return await this.snowRepository.findWhere({
+      where: query,
+    });
   }
 }

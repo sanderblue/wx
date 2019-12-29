@@ -2,13 +2,11 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from '@emotion/styled';
 import orderBy from 'lodash/orderBy';
-import groupBy from 'lodash/groupBy';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import {
   getDataForDateRange,
   getNurmericalSeriesData,
-  groupByLocation,
 } from './chart-data.service';
 import { SnowDepthObservationDaily } from '@wx/shared/data';
 import { ApexOptions } from 'apexcharts';
@@ -83,16 +81,6 @@ export const Chart = () => {
     };
   });
 
-  // const series = [
-  //   {
-  //     name: 'MtHoodMeadows',
-  //     data: getNurmericalSeriesData<SnowDepthObservationDaily>(
-  //       dataSeries,
-  //       'averageSnowDepthForDate',
-  //     ),
-  //   },
-  // ];
-
   const chartOptions: ApexOptions = {
     chart: {
       id: 'basic-line',
@@ -122,7 +110,7 @@ export const Chart = () => {
   return (
     <div>
       <SnowChart>
-        <h1>Welcome to chart component!</h1>
+        <h1>Snow Depth</h1>
 
         <div id="chart">
           <ReactApexChart options={state.options} series={state.series} />

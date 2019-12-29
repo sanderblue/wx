@@ -1,6 +1,7 @@
 import React from 'react';
-
 import styled from '@emotion/styled';
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
 import Chart from './components/Chart';
 
 const StyledApp = styled.div`
@@ -14,13 +15,19 @@ const StyledApp = styled.div`
   }
 `;
 
+const client = new ApolloClient({
+  uri: 'https://localhost:3333/graphql',
+});
+
 export const App = () => {
   return (
-    <StyledApp>
-      <main>
-        <Chart></Chart>
-      </main>
-    </StyledApp>
+    <ApolloProvider client={client}>
+      <StyledApp>
+        <main>
+          <Chart></Chart>
+        </main>
+      </StyledApp>
+    </ApolloProvider>
   );
 };
 

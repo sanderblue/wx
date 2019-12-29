@@ -24,6 +24,12 @@ export class DataService {
     return await this.repository.saveNew(entities);
   }
 
+  public async update(
+    d: SnowDepthObservationDailyEntity[],
+  ): Promise<SnowDepthObservationDailyEntity[]> {
+    return await this.repository.update(d);
+  }
+
   public async downloadToFile(url: string, dest: string = './'): Promise<any> {
     let file = fs.createWriteStream(dest);
 
@@ -45,8 +51,6 @@ export class DataService {
           });
 
           stream.on('end', () => {
-            console.log('streaming end...');
-
             file.end();
           });
         })

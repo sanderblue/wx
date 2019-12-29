@@ -40,7 +40,7 @@ export class SnowDepthObservationDailyRepository {
     d: SnowDepthObservationDailyEntity[],
   ): Promise<SnowDepthObservationDailyEntity[]> {
     return await Promise.all(
-      d.map(async (s, i) => {
+      d.map(async (s) => {
         const exists = await this.repository.findOne({
           location: s.location,
           date: s.date,
@@ -51,5 +51,26 @@ export class SnowDepthObservationDailyRepository {
         }
       }),
     );
+  }
+
+  public async update(d: SnowDepthObservationDailyEntity[]): Promise<any[]> {
+    return await Promise.all(
+      d.map(async (s, i) => {
+        return await this.updateOne(
+          {
+            location: s.location,
+            date: s.date,
+          },
+          s,
+        );
+      }),
+    );
+  }
+
+  public async updateOne(
+    conditions: FindConditions<Partial<SnowDepthObservationDailyEntity>>,
+    entity: SnowDepthObservationDailyEntity,
+  ): Promise<UpdateResult> {
+    return this.repository.update(conditions, entity);
   }
 }

@@ -8,6 +8,14 @@ type LocationString = 'mt-hood' | 'crystal' | 'mt-baker-ski-area';
 
 @Injectable()
 export class SnowCronService extends NestSchedule {
+  private locations: LocationString[] = [
+    'mt-hood',
+    'crystal',
+    'mt-baker-ski-area',
+  ];
+
+  private pathToFiles = `${__dirname}/assets`;
+
   constructor(
     private readonly dataService: DataService,
     private readonly dataAggregator: DataAggregatorService,
@@ -21,37 +29,41 @@ export class SnowCronService extends NestSchedule {
     immediate: true,
   })
   async cronJob() {
-    const location: LocationString = 'mt-baker-ski-area';
-    const startDate = new Date('2014-01-01');
-    const endDate = new Date('2019-12-26');
+    const startDate = new Date('2019-12-01');
+    const endDate = new Date('2019-12-29');
 
-    console.log(
-      `\ncron job: start | location: ${location} | startDate: ${startDate} | endDate: ${endDate}\n`,
+    await Promise.all(
+      this.locations.map(async (location) => {
+        console.log(
+          `\ncron job: start | location: ${location} | startDate: ${startDate} | endDate: ${endDate}\n`,
+        );
+
+        return await this.execute(location, startDate, endDate);
+      }),
     );
 
-    const pathToFiles = `${__dirname}/assets`;
+    console.log('cron job: end\n');
+  }
 
-    const result = await this.dataService.downloadToFile(
-      this.getSnowDepthUrl(location, startDate, endDate),
-      `${pathToFiles}/data.csv`,
-    );
-
-    const data = await this.dataService.convertCsvFileToJson(result.path);
-
-    // console.log('CONVERTED CSV TO JSON:', data);
-
-    const dailyData = this.dataAggregator.aggregateDailySnowDepthData(data);
-    const dailyResult = JSON.stringify(dailyData);
-    const filePath = `${pathToFiles}/snow-depth-observations-daily-${location}.json`;
-
-    fs.writeFileSync(filePath, dailyResult);
-
-    console.log('CONVERTED CSV TO JSON:', filePath);
-
+  private async execute(
+    location: LocationString,
+    startDate: Date,
+    endDate: Date,
+  ) {
     try {
-      await this.dataService.save(dailyData);
+      const result = await this.dataService.downloadToFile(
+        this.getSnowDepthUrl(location, startDate, endDate),
+        `${this.pathToFiles}/data-${location}.csv`,
+      );
 
-      console.log('cron job: end');
+      const data = await this.dataService.convertCsvFileToJson(result.path);
+      const dailyData = this.dataAggregator.aggregateDailySnowDepthData(data);
+      const dailyResult = JSON.stringify(dailyData);
+      const filePath = `${this.pathToFiles}/snow-depth-observations-daily-${location}.json`;
+
+      fs.writeFileSync(filePath, dailyResult);
+
+      await this.dataService.save(dailyData);
     } catch (error) {
       console.error('Error caught:', error.message);
     }

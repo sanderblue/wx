@@ -27,7 +27,7 @@ import { AppGraphQLModule } from '@wx/backend/graphql';
     }),
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
-      autoSchemaFile: 'schema.gql',
+      autoSchemaFile: `${__dirname}/schema.gql`,
     }),
     AppGraphQLModule,
   ],

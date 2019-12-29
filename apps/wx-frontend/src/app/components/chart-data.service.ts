@@ -17,7 +17,9 @@ export function getDataForDateRange(
   const endTimestamp = new Date(endDate).getTime();
 
   return data.filter((item) => {
-    return item.timestamp >= startTimestamp && item.timestamp <= endTimestamp;
+    const timestamp = new Date(item.date).getTime();
+
+    return timestamp >= startTimestamp && timestamp <= endTimestamp;
   });
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import Chart from './Chart';
+import Chart from './chart';
 
 describe(' Chart', () => {
   it('should render successfully', () => {

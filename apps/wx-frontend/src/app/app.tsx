@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import Chart from './components/Chart';
+import Chart from './components/chart';
 
 const StyledApp = styled.div`
   font-family: Avenir, sans-serif;

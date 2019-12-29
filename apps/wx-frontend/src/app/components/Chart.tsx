@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from '@emotion/styled';
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-import groupBy from 'lodash/groupBy';
 import orderBy from 'lodash/orderBy';
-import { SnowDepthObservationDaily } from '@wx/shared/data';
-import axios, { AxiosResponse } from 'axios';
-import ApexCharts, { ApexOptions } from 'apexcharts';
-import { Dictionary } from 'lodash';
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 import {
-  groupByLocation,
   getDataForDateRange,
   getNurmericalSeriesData,
 } from './chart-data.service';
+import { SnowDepthObservationDaily } from '@wx/shared/data';
 
-interface ObservationLocation {
-  location: string;
-}
+const SnowChart = styled.div`
+  color: #888;
+`;
 
 const GET_OBSERVATIONS = gql`
   query getObservations($location: String!) {
@@ -29,17 +24,8 @@ const GET_OBSERVATIONS = gql`
   }
 `;
 
-/* eslint-disable-next-line */
-export interface ChartProps {}
-
-const StyledChart = styled.div`
-  color: #999;
-`;
-
-const locations = ['mt-hood', 'crystal', 'mt-baker-ski-area'];
-
-export default function Chart() {
-  const { data } = useQuery(GET_OBSERVATIONS, {
+export const Chart = () => {
+  const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
       location: 'MtHoodMeadowsBase',
     },
@@ -47,28 +33,26 @@ export default function Chart() {
 
   console.log('DATA:', data);
 
-  if (!data) {
-    return <StyledChart>Nope</StyledChart>;
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  const [chartOptions, setChartOptions] = useState({});
-  const [chartSeries, setChartSeries] = useState([]);
+  if (error) {
+    return <div>Error! {error.message}</div>;
+  }
 
-  let dataSeries = [];
-  let series = [];
-  let dates = [];
-
-  const dataSet = orderBy(data, ['location'], ['desc']);
-
-  console.log('DATA:', data);
-
-  dataSeries = getDataForDateRange(
+  const obs: any[] = data ? data.observations : [];
+  const dataSet = orderBy(obs, ['date'], ['desc']);
+  const dataSeries = getDataForDateRange(
     dataSet,
     new Date('2019-011-01'),
     new Date(),
   );
+  const dates = dataSeries.map((o) => o.date).reverse();
 
-  series = [
+  console.log('dataSeries:', dataSeries);
+
+  const series = [
     {
       name: 'MtHoodMeadows',
       data: getNurmericalSeriesData<SnowDepthObservationDaily>(
@@ -78,108 +62,34 @@ export default function Chart() {
     },
   ];
 
-  dates = dataSeries.map((o) => o.date).reverse();
-
-  const state = {
+  const chartOptions = {
     options: {
       chart: {
+        id: 'basic-line',
         height: 400,
         type: 'line',
       },
-      title: {
-        text: 'Snow Depth',
-        align: 'center',
-      },
       xaxis: {
-        type: 'datetime',
         categories: dates,
       },
-      yaxis: {
-        tooltip: {
-          enabled: true,
-        },
-      },
-      plotOptions: {},
     },
     series,
   };
 
-  setChartOptions(state.options);
-  setChartSeries(state.series);
-
-  async function fetchData() {
-    // const response = await axios.get('https://localhost:3333/api/snow/depth');
-
-    const { loading, data } = useQuery<any, ObservationLocation>(
-      GET_OBSERVATIONS,
-      { variables: { location: 'MtHoodMeadowsBase' } },
-    );
-
-    console.log('DATA:', data);
-
-    const response = await axios.post('https://localhost:3333/api/snow/depth');
-    const result = response.data;
-    const grouped = groupByLocation(result);
-    const dataSet = orderBy(grouped.MtHoodMeadowsBase, ['timestamp'], ['desc']);
-    const dataSeries = getDataForDateRange(
-      dataSet,
-      new Date('2019-011-01'),
-      new Date(),
-    );
-
-    const series = [
-      {
-        name: 'MtHoodMeadows',
-        data: getNurmericalSeriesData<SnowDepthObservationDaily>(
-          dataSeries,
-          'averageSnowDepthForDate',
-        ),
-      },
-    ];
-
-    const dates = dataSeries.map((o) => o.date).reverse();
-
-    // console.log('SERIES:', series);
-
-    const state = {
-      options: {
-        chart: {
-          height: 400,
-          type: 'line',
-        },
-        title: {
-          text: 'Snow Depth',
-          align: 'center',
-        },
-        xaxis: {
-          type: 'datetime',
-          categories: dates,
-        },
-        yaxis: {
-          tooltip: {
-            enabled: true,
-          },
-        },
-        plotOptions: {},
-      },
-      series,
-    };
-
-    setChartOptions(state.options);
-    setChartSeries(state.series);
-  }
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
-    <StyledChart>
-      <h1>Welcome to chart component!</h1>
+    <div>
+      <SnowChart>
+        <h1>Welcome to chart component!</h1>
 
-      <div id="chart">
-        <ReactApexChart options={chartOptions} series={chartSeries} />
-      </div>
-    </StyledChart>
+        <div id="chart">
+          <ReactApexChart
+            options={chartOptions.options}
+            series={chartOptions.series}
+          />
+        </div>
+      </SnowChart>
+    </div>
   );
-}
+};
+
+export default Chart;

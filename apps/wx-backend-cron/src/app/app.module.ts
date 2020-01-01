@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { toSafeInteger } from 'lodash';
 import { ScheduleModule } from 'nest-schedule';
-import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
+import {
+  SnowDepthObservationDailyEntity,
+  WeatherStationEntity,
+} from '@wx/backend/entities';
 import { SnowCronService } from './cron/snow-cron.service';
 import { ServicesModule } from '@wx/backend/services';
 
@@ -16,7 +19,7 @@ import { ServicesModule } from '@wx/backend/services';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: 'defaultdb',
-      entities: [SnowDepthObservationDailyEntity],
+      entities: [SnowDepthObservationDailyEntity, WeatherStationEntity],
       synchronize: process.env.ENVIRONMENT === 'production' ? false : true,
       ssl: true,
     }),

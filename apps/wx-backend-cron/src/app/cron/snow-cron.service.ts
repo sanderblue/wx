@@ -30,7 +30,7 @@ export class SnowCronService extends NestSchedule {
   })
   async cronJob() {
     const startDate = new Date('2019-12-01');
-    const endDate = new Date('2019-12-29');
+    const endDate = new Date('2020-01-02');
 
     await Promise.all(
       this.locations.map(async (location) => {

@@ -44,10 +44,7 @@ export class DataAggregatorService {
     console.log('Locations:', locations);
 
     let arraysOfData: any[] = [];
-    let aggregatedData: SnowDepthObservationDailyEntity[];
     let groupedByLocation = groupBy(data, 'location');
-
-    console.log('GROUPED:', Object.keys(groupedByLocation));
 
     forIn(
       groupedByLocation,
@@ -67,8 +64,6 @@ export class DataAggregatorService {
   public aggregateDailyValuesForLocation(data: any, location: string) {
     let groupedByDate = groupBy(data, 'date');
 
-    // console.log('groupedByDate', groupedByDate);
-
     return map(
       groupedByDate,
       (groupedData: SnowDepthObservationHourlyEntity[], date: string) => {
@@ -81,8 +76,6 @@ export class DataAggregatorService {
           hourlyObservationValues,
         );
         let average: any = mean(accurateHourlyValues);
-
-        // console.log('_.head(hourlyObservations).location', _.head(hourlyObservations).location);
 
         return {
           timestamp: new Date(date).getTime(),

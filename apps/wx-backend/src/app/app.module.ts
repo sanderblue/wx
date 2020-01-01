@@ -8,7 +8,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ServicesModule, DataService } from '@wx/backend/services';
 import { SnowController } from './snow/snow.controller';
-import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
+import {
+  SnowDepthObservationDailyEntity,
+  WeatherStationEntity,
+} from '@wx/backend/entities';
 import { AppGraphQLModule } from '@wx/backend/graphql';
 
 @Module({
@@ -21,7 +24,7 @@ import { AppGraphQLModule } from '@wx/backend/graphql';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: 'defaultdb',
-      entities: [SnowDepthObservationDailyEntity],
+      entities: [SnowDepthObservationDailyEntity, WeatherStationEntity],
       synchronize: process.env.ENVIRONMENT === 'production' ? false : true,
       ssl: true,
     }),

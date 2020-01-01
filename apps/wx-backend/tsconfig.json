@@ -1,13 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "types": [
-      "node",
-      "jest"
-    ],
-    "emitDecoratorMetadata": true
+    "types": ["node", "jest"],
+    "emitDecoratorMetadata": true,
+    "target": "esnext"
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["**/*.ts"]
 }

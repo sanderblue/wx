@@ -5,11 +5,13 @@
   "scripts": {
     "ng": "ng",
     "nx": "nx",
+    "prestart": "ngtw build",
     "start": "ng serve",
-    "start:wx-frontend": "ng serve wx-frontend",
+    "start:wx-frontend": "ngtw build && ng serve wx-frontend && ngtw watch",
     "start:wx-backend": "PORT=3333 ng serve wx-backend",
     "start:wx-backend-cron": "PORT=4444 ng serve wx-backend-cron",
     "build": "ng build",
+    "build:wx-frontend": "ngtw build && ng build",
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
@@ -68,6 +70,7 @@
     "react-dom": "16.12.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.4.0",
+    "tailwindcss": "^1.1.4",
     "type-graphql": "^0.17.6",
     "typeorm": "^0.2.21",
     "zone.js": "^0.9.1"

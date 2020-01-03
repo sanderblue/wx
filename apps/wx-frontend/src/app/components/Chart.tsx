@@ -11,12 +11,7 @@ import {
 import { SnowDepthObservationDaily } from '@wx/shared/data';
 import { ApexOptions } from 'apexcharts';
 
-const SnowChart = styled.div`
-  color: #888;
-  max-width: 768px;
-  width: 100%;
-  margin: 0 auto;
-`;
+const SnowChart = styled.div``;
 
 const GET_OBSERVATIONS = gql`
   query getObservations($locations: [String!]!) {
@@ -33,6 +28,9 @@ interface State {
   series: ApexAxisChartSeries;
 }
 
+/**
+ * Component
+ */
 export const Chart = () => {
   const locations = [
     'MtHoodMeadowsBase',

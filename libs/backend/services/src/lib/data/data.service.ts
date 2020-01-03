@@ -16,7 +16,7 @@ export class DataService {
     private readonly repository: SnowDepthObservationDailyRepository,
   ) {}
 
-  public async save(
+  public async saveNew(
     d: SnowDepthObservationDailyEntity[],
   ): Promise<SnowDepthObservationDailyEntity[]> {
     const entities = await this.repository.create(d);

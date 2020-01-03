@@ -30,7 +30,7 @@ export class SnowCronService extends NestSchedule {
   })
   async cronJob() {
     const startDate = new Date('2019-12-01');
-    const endDate = new Date('2020-01-02');
+    const endDate = new Date();
 
     await Promise.all(
       this.locations.map(async (location) => {
@@ -63,7 +63,7 @@ export class SnowCronService extends NestSchedule {
 
       fs.writeFileSync(filePath, dailyResult);
 
-      await this.dataService.save(dailyData);
+      await this.dataService.saveNew(dailyData);
     } catch (error) {
       console.error('Error caught:', error.message);
     }

@@ -24,8 +24,13 @@ interface Store {
 
 // Store for cached location selections
 const store: Store = {
-  items: [],
-  locations: [],
+  items: [
+    {
+      label: 'Mt. Hood Meadows Base',
+      value: 'MtHoodMeadowsBase',
+    },
+  ],
+  locations: ['MtHoodMeadowsBase', 'TimberlineLodge'],
 };
 
 export const Autocomplete = (props: AutocompleteProps) => {

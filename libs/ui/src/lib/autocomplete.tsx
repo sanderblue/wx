@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 const StyledAutoComplete = styled.div``;
@@ -8,15 +8,6 @@ const StyledIcon = styled.div`
   left: 0.8rem;
 `;
 
-/* eslint-disable-next-line */
-export interface AutocompleteProps {}
-
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-function useQuery() {
-  return new URLSearchParams(window.location.search);
-}
-
 interface Store {
   items: any[];
   locations: string[];
@@ -24,24 +15,14 @@ interface Store {
 
 // Store for cached location selections
 const store: Store = {
-  items: [
-    {
-      label: 'Mt. Hood Meadows Base',
-      value: 'MtHoodMeadowsBase',
-    },
-  ],
+  items: [],
   locations: ['MtHoodMeadowsBase', 'TimberlineLodge'],
 };
 
-export const Autocomplete = (props: AutocompleteProps) => {
+export const Autocomplete = (props: RouteComponentProps) => {
   const [state, setState] = useState({
     items: [],
   });
-  const [searchQuery, setSearchQuery] = useState('');
-
-  let query = useQuery();
-
-  console.log('Autocomplete::useQuery():', query);
 
   const locations = [
     {
@@ -69,32 +50,14 @@ export const Autocomplete = (props: AutocompleteProps) => {
       store.locations.push(item.value);
     }
 
-    console.log('STORE:', store);
-
-    setSearchQuery('');
     setState({
       items: [],
     });
 
-    const historyState = { test: 'replace-state-test' };
-
     let queryP = new URLSearchParams(window.location.search);
     queryP.set('query', store.locations.toString());
 
-    const u = `${window.location.origin}?${queryP.toString()}`;
-
-    console.log('URL BUILT:', u);
-
-    let url = new URL(u);
-
-    window.history.replaceState(historyState, 'Replaced Title', url.toString());
-
-    let queryParams = new URLSearchParams();
-    queryParams.set('query', store.locations.join(','));
-
-    console.log('Query string:', queryParams.toString());
-
-    // window.location.search = queryParams.toString();
+    props.history.push(`?${queryP.toString()}`, { state: 'test' });
   }
 
   // https://github.com/sindresorhus/query-string
@@ -156,4 +119,4 @@ export const Autocomplete = (props: AutocompleteProps) => {
   );
 };
 
-export default Autocomplete;
+export default withRouter(Autocomplete);

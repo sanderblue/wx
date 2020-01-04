@@ -28,15 +28,23 @@ interface State {
   series: ApexAxisChartSeries;
 }
 
+interface ChartProps {
+  locations: string;
+}
+
 /**
  * Component
  */
-export const Chart = () => {
-  const locations = [
-    'MtHoodMeadowsBase',
-    'TimberlineLodge',
-    'MtBakerHeatherMeadows',
-  ];
+export const Chart = (props: ChartProps) => {
+  const locations = props.locations.split(',');
+
+  // [
+  //   'MtHoodMeadowsBase',
+  //   'TimberlineLodge',
+  //   'MtBakerHeatherMeadows',
+  // ];
+
+  console.log('ChartProps:', props.locations.split(','));
 
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
@@ -59,6 +67,8 @@ export const Chart = () => {
   let dates = [];
 
   const seriez = locations.map((location) => {
+    console.log('SERIEZ?', location);
+
     const matched = obs.filter(
       (d: SnowDepthObservationDaily) => d.location === location,
     );

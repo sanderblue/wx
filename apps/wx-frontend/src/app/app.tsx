@@ -1,8 +1,7 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import Chart from './components/chart';
 import { Nav } from '@wx/ui';
 
 // Styles
@@ -36,7 +35,7 @@ export const App = () => {
         <Sidebar></Sidebar>
 
         <main className="main-content flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5">
-          <Route path="/" exact component={Home} />
+          <Route path="/" component={Home} />
         </main>
       </div>
     </ApolloProvider>

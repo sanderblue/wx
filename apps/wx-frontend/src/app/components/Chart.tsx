@@ -1,27 +1,15 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
-import styled from '@emotion/styled';
 import orderBy from 'lodash/orderBy';
 import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+
 import {
   getDataForDateRange,
   getNurmericalSeriesData,
 } from './chart-data.service';
 import { SnowDepthObservationDaily } from '@wx/shared/data';
 import { ApexOptions } from 'apexcharts';
-
-const SnowChart = styled.div``;
-
-const GET_OBSERVATIONS = gql`
-  query getObservations($locations: [String!]!) {
-    observations(locations: $locations) {
-      location
-      date
-      averageSnowDepthForDate
-    }
-  }
-`;
+import { GET_OBSERVATIONS } from '../graphql/queries';
 
 interface State {
   options: ApexOptions;
@@ -36,23 +24,17 @@ interface ChartProps {
  * Component
  */
 export const Chart = (props: ChartProps) => {
+  console.log('ChartProps:', props);
+
   const locations = props.locations.split(',');
-
-  // [
-  //   'MtHoodMeadowsBase',
-  //   'TimberlineLodge',
-  //   'MtBakerHeatherMeadows',
-  // ];
-
-  console.log('ChartProps:', props.locations.split(','));
 
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
-      locations,
+      locations: [],
     },
   });
 
-  console.log('DATA:', data);
+  // console.log('DATA:', data);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -120,13 +102,11 @@ export const Chart = (props: ChartProps) => {
 
   return (
     <div>
-      <SnowChart>
-        <h1>Snow Depth</h1>
+      <h1>Snow Depth</h1>
 
-        <div id="chart">
-          <ReactApexChart options={state.options} series={state.series} />
-        </div>
-      </SnowChart>
+      <div id="chart">
+        <ReactApexChart options={state.options} series={state.series} />
+      </div>
     </div>
   );
 };

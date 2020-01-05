@@ -1,8 +1,8 @@
 import React from 'react';
-
 import styled from '@emotion/styled';
 import Chart from '../components/chart';
 import { RouteComponentProps } from 'react-router-dom';
+import { parseQueryParams } from '../utils';
 
 /* eslint-disable-next-line */
 export interface HomeProps {}
@@ -12,14 +12,12 @@ const StyledHome = styled.div``;
 export const Home = (props: RouteComponentProps) => {
   console.log('HOME PROPS:', props);
 
-  props.history.listen((location, action) => {
-    // location is an object like window.location
-    console.log('ROUTE CHANGE?', action, location.pathname, location.state);
-  });
+  // props.history.listen((location, action) => {
+  //   // location is an object like window.location
+  //   console.log('ROUTE CHANGE?', action, location.pathname, location.state);
+  // });
 
-  const qp = new URLSearchParams(props.location.search);
-
-  const parsed = parseQueryParams(qp);
+  const parsed = parseQueryParams(new URLSearchParams(props.location.search));
 
   console.log('PARSED:', parsed);
 
@@ -37,13 +35,3 @@ export const Home = (props: RouteComponentProps) => {
 };
 
 export default Home;
-
-function parseQueryParams(queryParams: URLSearchParams): any {
-  const p = {};
-
-  queryParams.forEach((value, key) => {
-    p[key] = value;
-  });
-
-  return p;
-}

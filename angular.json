@@ -505,6 +505,10 @@
     "@nestjs/schematics:controller": {
       "sourceRoot": "apps",
       "path": "wx-backend/src/app"
+    },
+    "@nestjs/schematics:resolver": {
+      "sourceRoot": "libs",
+      "path": "backend/graphql/src/lib"
     }
   },
   "defaultProject": "wx-frontend"

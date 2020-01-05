@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 
 const StyledAutoComplete = styled.div``;
 const StyledIcon = styled.div`
   top: 0.5rem;
   left: 0.8rem;
+`;
+
+export const GET_WEATHER_STATIONS = gql`
+  query getWeatherStations($l: [Object!]!) {
+    weatherStations {
+      location
+    }
+  }
 `;
 
 interface Store {
@@ -16,7 +26,7 @@ interface Store {
 // Store for cached location selections
 const store: Store = {
   items: [],
-  locations: ['MtHoodMeadowsBase', 'TimberlineLodge'],
+  locations: [],
 };
 
 export const Autocomplete = (props: RouteComponentProps) => {
@@ -24,22 +34,16 @@ export const Autocomplete = (props: RouteComponentProps) => {
     items: [],
   });
 
-  const locations = [
-    {
-      label: 'Mt. Hood Meadows Base',
-      value: 'MtHoodMeadowsBase',
-    },
-    {
-      label: 'Timberline Lodge Ski Area',
-      value: 'TimberlineLodge',
-    },
-  ];
+  const { loading, error, data } = useQuery(GET_WEATHER_STATIONS);
+
+  console.log('DATA:', data);
 
   function onKeyUp(event: any) {
     setState({
-      items: locations.filter((item) =>
-        item.label.includes(event.target.value),
-      ),
+      items: [],
+      // locations.filter((item) =>
+      //   item.label.includes(event.target.value),
+      // ),
     });
   }
 
@@ -55,7 +59,7 @@ export const Autocomplete = (props: RouteComponentProps) => {
     });
 
     let queryP = new URLSearchParams(window.location.search);
-    queryP.set('query', store.locations.toString());
+    queryP.set('query', JSON.stringify(store.locations));
 
     props.history.push(`?${queryP.toString()}`, { state: 'test' });
   }

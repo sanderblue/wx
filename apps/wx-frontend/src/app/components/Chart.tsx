@@ -26,15 +26,17 @@ interface ChartProps {
 export const Chart = (props: ChartProps) => {
   console.log('ChartProps:', props);
 
-  const locations = props.locations.split(',');
+  const locations = props.locations ? JSON.parse(props.locations) : [];
+
+  console.log('Chart LOCATIONS:', locations);
 
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
-      locations: [],
+      locations,
     },
   });
 
-  // console.log('DATA:', data);
+  console.log('DATA:', data);
 
   if (loading) {
     return <div>Loading...</div>;

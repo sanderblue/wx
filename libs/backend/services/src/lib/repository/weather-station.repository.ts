@@ -16,6 +16,10 @@ export class WeatherStationRepository {
     return this.repository.find(conditions);
   }
 
+  public async findWhere(conditions: any): Promise<WeatherStationEntity[]> {
+    return this.repository.find(conditions);
+  }
+
   public async create(
     d: WeatherStationEntity[],
   ): Promise<WeatherStationEntity[]> {

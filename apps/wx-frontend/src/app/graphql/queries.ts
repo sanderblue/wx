@@ -10,10 +10,10 @@ export const GET_OBSERVATIONS = gql`
   }
 `;
 
-export const GET_WEATHER_STATIONS = gql`
-  query getWeatherStations() {
-    weatherStations {
-      location
-    }
-  }
-`;
+// export const GET_WEATHER_STATIONS = gql`
+//   query getWeatherStations() {
+//     weatherStations {
+//       location
+//     }
+//   }
+// `;

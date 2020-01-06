@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 
 const StyledAutoComplete = styled.div``;
@@ -11,8 +11,8 @@ const StyledIcon = styled.div`
 `;
 
 export const GET_WEATHER_STATIONS = gql`
-  query getWeatherStations($l: [Object!]!) {
-    weatherStations {
+  query weatherStations($query: String!) {
+    weatherStations(query: $query) {
       location
     }
   }
@@ -29,18 +29,42 @@ const store: Store = {
   locations: [],
 };
 
+interface WxStation {
+  location: string;
+}
+
+interface WxStations {
+  weatherStations: WxStation[];
+}
+
 export const Autocomplete = (props: RouteComponentProps) => {
+  const client = useApolloClient();
   const [state, setState] = useState({
     items: [],
   });
 
-  const { loading, error, data } = useQuery(GET_WEATHER_STATIONS);
+  async function onKeyUp(event: any) {
+    const q = event.target.value.trim();
 
-  console.log('DATA:', data);
+    if (!q) {
+      return;
+    }
 
-  function onKeyUp(event: any) {
+    const results = await client.query<WxStations>({
+      query: GET_WEATHER_STATIONS,
+      variables: {
+        query: q,
+      },
+    });
+
+    console.log('DATA:', results);
+
+    // const mapped = results.data.weatherStations.map((s) => s.location);
+
+    // console.log('MAPPED:', mapped);
+
     setState({
-      items: [],
+      items: results.data.weatherStations,
       // locations.filter((item) =>
       //   item.label.includes(event.target.value),
       // ),
@@ -50,33 +74,25 @@ export const Autocomplete = (props: RouteComponentProps) => {
   function onClickItem(item: any) {
     store.items = [...store.items, item];
 
-    if (!store.locations.includes(item.value)) {
-      store.locations.push(item.value);
+    if (!store.locations.includes(item.location)) {
+      store.locations.push(item.location);
     }
+
+    console.log('STORE:', store);
 
     setState({
       items: [],
     });
 
+    updateQueryParams();
+  }
+
+  // https://github.com/sindresorhus/query-string
+  function updateQueryParams() {
     let queryP = new URLSearchParams(window.location.search);
     queryP.set('query', JSON.stringify(store.locations));
 
     props.history.push(`?${queryP.toString()}`, { state: 'test' });
-  }
-
-  // https://github.com/sindresorhus/query-string
-  function updateQueryParams(locations: string[]) {
-    let url = new URL(window.location.href);
-    let params = new URLSearchParams(url.search);
-
-    console.log('');
-    console.log('URL:                  ', url);
-    console.log('SEARCH PARAMS:        ', params);
-
-    params.set('locations', JSON.stringify(locations));
-
-    console.log('SEARCH PARAMS UPDATED:', params);
-    console.log('');
   }
 
   return (
@@ -112,7 +128,7 @@ export const Autocomplete = (props: RouteComponentProps) => {
                     c ? 'mx-2 p-2' : 'mx-2 p-2 border-b border-gray-700'
                   }
                 >
-                  {item.label}
+                  {item.location}
                 </div>
               </li>
             );

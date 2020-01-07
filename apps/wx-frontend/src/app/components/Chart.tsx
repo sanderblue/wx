@@ -10,6 +10,7 @@ import {
 import { SnowDepthObservationDaily } from '@wx/shared/data';
 import { ApexOptions } from 'apexcharts';
 import { GET_OBSERVATIONS } from '../graphql/queries';
+import { parseJSON } from '../utils';
 
 interface State {
   options: ApexOptions;
@@ -24,9 +25,7 @@ interface ChartProps {
  * Component
  */
 export const Chart = (props: ChartProps) => {
-  console.log('ChartProps:', props);
-
-  const locations = props.locations ? JSON.parse(props.locations) : [];
+  const locations = parseJSON<string[]>(props.locations, []);
 
   console.log('Chart LOCATIONS:', locations);
 
@@ -36,7 +35,7 @@ export const Chart = (props: ChartProps) => {
     },
   });
 
-  console.log('DATA:', data);
+  // console.log('DATA:', data);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -47,12 +46,9 @@ export const Chart = (props: ChartProps) => {
   }
 
   const obs: any[] = data ? data.observations : [];
-
   let dates = [];
 
   const seriez = locations.map((location) => {
-    console.log('SERIEZ?', location);
-
     const matched = obs.filter(
       (d: SnowDepthObservationDaily) => d.location === location,
     );

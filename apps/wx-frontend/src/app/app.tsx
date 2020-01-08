@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import ApolloClient from 'apollo-boost';
 import { Nav } from '@wx/ui';
 
@@ -8,29 +9,37 @@ import { Nav } from '@wx/ui';
 import '../assets/styles.css';
 import Sidebar from './components/sidebar';
 import Home from './containers/home';
+import { parseJSON } from './utils';
 
 const client = new ApolloClient({
   uri: 'https://localhost:3333/graphql',
 });
 
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-function useQuery() {
-  return new URLSearchParams(window.location.search);
+function updateQueryParams(data): URLSearchParams {
+  const queryP = new URLSearchParams(window.location.search);
+  const params = parseJSON(queryP.get('query'), []);
+
+  if (!params.includes(data)) {
+    params.push(data);
+  }
+
+  queryP.set('query', JSON.stringify(params));
+
+  return queryP;
 }
 
-window.onhashchange = function() {
-  console.log('onhashchange:');
-};
+export const App = (props: RouteComponentProps) => {
+  const { history } = props;
 
-export const App = () => {
-  const q = useQuery();
-
-  console.log('App::useQuery():', q);
+  const updateState = (d: any) => {
+    const queryParams = updateQueryParams(d.location);
+    history.push(`?${queryParams.toString()}`);
+  };
 
   return (
     <ApolloProvider client={client}>
-      <Nav></Nav>
+      <Nav onSelectSearchResult={updateState}></Nav>
+
       <div className="flex flex-col md:flex-row">
         <Sidebar></Sidebar>
 
@@ -42,4 +51,4 @@ export const App = () => {
   );
 };
 
-export default App;
+export default withRouter(App);

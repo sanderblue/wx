@@ -1,13 +1,8 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
-import orderBy from 'lodash/orderBy';
 import { useQuery } from '@apollo/react-hooks';
 
-import {
-  getDataForDateRange,
-  getNurmericalSeriesData,
-} from './chart-data.service';
-import { SnowDepthObservationDaily } from '@wx/shared/data';
+import { generateSeries } from './chart-data.service';
 import { ApexOptions } from 'apexcharts';
 import { GET_OBSERVATIONS } from '../graphql/queries';
 import { parseJSON } from '../utils';
@@ -17,17 +12,27 @@ interface State {
   series: ApexAxisChartSeries;
 }
 
+interface Store {
+  locations: string[];
+  series: ApexAxisChartSeries;
+}
+
 interface ChartProps {
   locations: string;
 }
+
+const STORE: Store = {
+  locations: [],
+  series: [],
+};
 
 /**
  * Component
  */
 export const Chart = (props: ChartProps) => {
-  const locations = parseJSON<string[]>(props.locations, []);
+  const locations = parseJSON<string[]>(props.locations, STORE.locations);
 
-  console.log('Chart LOCATIONS:', locations);
+  console.log('Chart::locations', locations);
 
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
@@ -46,31 +51,8 @@ export const Chart = (props: ChartProps) => {
   }
 
   const obs: any[] = data ? data.observations : [];
-  let dates = [];
 
-  const seriez = locations.map((location) => {
-    const matched = obs.filter(
-      (d: SnowDepthObservationDaily) => d.location === location,
-    );
-    const dataSet = orderBy(matched, ['date'], ['desc']);
-    const dataSeries = getDataForDateRange(
-      dataSet,
-      new Date('2019-011-20'),
-      new Date(),
-    );
-
-    if (!data.length) {
-      dates = dataSeries.map((o) => o.date).reverse();
-    }
-
-    return {
-      name: location,
-      data: getNurmericalSeriesData<SnowDepthObservationDaily>(
-        dataSeries,
-        'averageSnowDepthForDate',
-      ),
-    };
-  });
+  const { series, xAxisLabels } = generateSeries(locations, obs);
 
   const chartOptions: ApexOptions = {
     chart: {
@@ -80,7 +62,7 @@ export const Chart = (props: ChartProps) => {
       fontFamily: 'Avenir',
     },
     xaxis: {
-      categories: dates,
+      categories: xAxisLabels,
       type: 'datetime',
       labels: {
         formatter: (value) => {
@@ -95,7 +77,7 @@ export const Chart = (props: ChartProps) => {
 
   const state: State = {
     options: chartOptions,
-    series: seriez,
+    series,
   };
 
   return (

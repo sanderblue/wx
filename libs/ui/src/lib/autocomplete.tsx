@@ -37,7 +37,13 @@ interface WxStations {
   weatherStations: WxStation[];
 }
 
-export const Autocomplete = (props: RouteComponentProps) => {
+interface AutocompleteProps extends RouteComponentProps {
+  onSelectResult: Function;
+}
+
+export const Autocomplete = (props: AutocompleteProps) => {
+  const { onSelectResult } = props;
+
   const client = useApolloClient();
   const [state, setState] = useState({
     items: [],
@@ -57,17 +63,8 @@ export const Autocomplete = (props: RouteComponentProps) => {
       },
     });
 
-    console.log('DATA:', results);
-
-    // const mapped = results.data.weatherStations.map((s) => s.location);
-
-    // console.log('MAPPED:', mapped);
-
     setState({
       items: results.data.weatherStations,
-      // locations.filter((item) =>
-      //   item.label.includes(event.target.value),
-      // ),
     });
   }
 
@@ -84,15 +81,7 @@ export const Autocomplete = (props: RouteComponentProps) => {
       items: [],
     });
 
-    updateQueryParams();
-  }
-
-  // https://github.com/sindresorhus/query-string
-  function updateQueryParams() {
-    let queryP = new URLSearchParams(window.location.search);
-    queryP.set('query', JSON.stringify(store.locations));
-
-    props.history.push(`?${queryP.toString()}`, { state: 'test' });
+    onSelectResult(item);
   }
 
   return (

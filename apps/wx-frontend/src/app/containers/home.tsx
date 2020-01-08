@@ -1,16 +1,14 @@
 import React from 'react';
-import styled from '@emotion/styled';
 import Chart from '../components/chart';
 import { RouteComponentProps } from 'react-router-dom';
-import { parseQueryParams } from '../utils';
+import { parseQueryParams, parseJSON } from '../utils';
 
 /* eslint-disable-next-line */
 export interface HomeProps {}
 
 export const Home = (props: RouteComponentProps) => {
   const parsed = parseQueryParams(new URLSearchParams(props.location.search));
-
-  console.log('HOME:', parsed);
+  const locations = parseJSON<string[]>(parsed.query, []);
 
   return (
     <section>
@@ -19,7 +17,7 @@ export const Home = (props: RouteComponentProps) => {
       </div>
 
       <div className="p-4">
-        <Chart locations={parsed.query}></Chart>
+        <Chart locations={locations}></Chart>
       </div>
     </section>
   );

@@ -3,7 +3,7 @@ import { Dictionary } from 'lodash';
 import groupBy from 'lodash/groupBy';
 import orderBy from 'lodash/orderBy';
 
-interface Series {
+export interface Series {
   series: ApexAxisChartSeries;
   xAxisLabels: string[];
 }

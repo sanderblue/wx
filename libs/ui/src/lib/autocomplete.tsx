@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { useQuery, useApolloClient } from '@apollo/react-hooks';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { useApolloClient } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 
 const StyledAutoComplete = styled.div``;
@@ -74,8 +74,6 @@ export const Autocomplete = (props: AutocompleteProps) => {
     if (!store.locations.includes(item.location)) {
       store.locations.push(item.location);
     }
-
-    console.log('STORE:', store);
 
     setState({
       items: [],

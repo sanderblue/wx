@@ -1,11 +1,19 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
+import styled from '@emotion/styled';
 import { useQuery } from '@apollo/react-hooks';
 
 import { generateSeries } from './chart-data.service';
 import { ApexOptions } from 'apexcharts';
 import { GET_OBSERVATIONS } from '../graphql/queries';
-import { parseJSON } from '../utils';
+
+const Loading = styled.div`
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
 
 interface State {
   options: ApexOptions;
@@ -18,7 +26,7 @@ interface Store {
 }
 
 interface ChartProps {
-  locations: string;
+  locations: string[];
 }
 
 const STORE: Store = {
@@ -30,10 +38,9 @@ const STORE: Store = {
  * Component
  */
 export const Chart = (props: ChartProps) => {
-  const locations = parseJSON<string[]>(props.locations, STORE.locations);
+  console.log('Chart::locations', props.locations);
 
-  console.log('Chart::locations', locations);
-
+  const locations = props.locations;
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
       locations,
@@ -43,7 +50,7 @@ export const Chart = (props: ChartProps) => {
   // console.log('DATA:', data);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading>Loading...</Loading>;
   }
 
   if (error) {

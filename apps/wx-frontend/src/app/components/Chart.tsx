@@ -38,9 +38,9 @@ const STORE: Store = {
  * Component
  */
 export const Chart = (props: ChartProps) => {
-  console.log('Chart::locations', props.locations);
+  console.log('Chart::props', props);
 
-  const locations = props.locations;
+  const locations = props.locations || [];
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
       locations,

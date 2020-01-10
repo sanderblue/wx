@@ -19,6 +19,8 @@ function updateQueryParams(data): URLSearchParams {
   const queryP = new URLSearchParams(window.location.search);
   const params = parseJSON(queryP.get('query'), []);
 
+  console.log('updateQueryParams:', params);
+
   if (!params.includes(data)) {
     params.push(data);
   }

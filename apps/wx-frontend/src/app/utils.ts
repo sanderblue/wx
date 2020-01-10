@@ -12,7 +12,11 @@ export function parseQueryParams(
 
 export function parseJSON<T>(json: string, fallbackReturn: T): T {
   try {
-    return JSON.parse(json);
+    const result = JSON.parse(json);
+
+    console.log('RESULT:', result);
+
+    return result ? result : fallbackReturn;
   } catch (error) {
     console.warn('Failed to parse JSON, returning fallback data.');
 

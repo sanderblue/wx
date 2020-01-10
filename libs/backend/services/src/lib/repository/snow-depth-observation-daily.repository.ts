@@ -46,15 +46,19 @@ export class SnowDepthObservationDailyRepository {
     d: SnowDepthObservationDailyEntity[],
   ): Promise<SnowDepthObservationDailyEntity[]> {
     return await Promise.all(
-      d.map(async (s) => {
-        const exists = await this.repository.findOne({
-          location: s.location,
-          date: s.date,
-        });
+      d.map(async (entity) => {
+        const conditions = {
+          location: entity.location,
+          date: entity.date,
+        };
+
+        const exists = await this.repository.findOne(conditions);
 
         if (!exists) {
-          return this.saveOne(s);
+          return this.saveOne(entity);
         }
+
+        this.updateOne(conditions, entity);
       }),
     );
   }
@@ -76,7 +80,13 @@ export class SnowDepthObservationDailyRepository {
   public async updateOne(
     conditions: FindConditions<Partial<SnowDepthObservationDailyEntity>>,
     entity: SnowDepthObservationDailyEntity,
-  ): Promise<UpdateResult> {
-    return this.repository.update(conditions, entity);
+  ): Promise<SnowDepthObservationDailyEntity> {
+    try {
+      await this.repository.update(conditions, entity);
+
+      return entity;
+    } catch (error) {
+      console.error('ERROR:', error);
+    }
   }
 }

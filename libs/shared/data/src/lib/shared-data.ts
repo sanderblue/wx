@@ -8,6 +8,10 @@ export interface SnowDepthObservationDaily {
   hourlyObservations: number[];
 }
 
+export interface ObjectLiteral {
+  [key: string]: any;
+}
+
 export const weatherStations = [
   {
     location: 'MtBakerHeatherMeadows',

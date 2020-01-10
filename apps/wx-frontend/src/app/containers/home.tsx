@@ -8,7 +8,12 @@ export interface HomeProps {}
 
 export const Home = (props: RouteComponentProps) => {
   const parsed = parseQueryParams(new URLSearchParams(props.location.search));
+
+  console.log('HOME::parsed:', parsed.query);
+
   const locations = parseJSON<string[]>(parsed.query, []);
+
+  console.log('HOME::locations:', locations);
 
   return (
     <section>

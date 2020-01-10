@@ -33,6 +33,8 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+*.crt
+*.key
 
 # CSS
 apps/**/*.css

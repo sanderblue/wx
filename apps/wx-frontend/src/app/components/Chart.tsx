@@ -7,12 +7,13 @@ import { generateSeries } from './chart-data.service';
 import { ApexOptions } from 'apexcharts';
 import { GET_OBSERVATIONS } from '../graphql/queries';
 
-const Loading = styled.div`
+const NoData = styled.div`
   height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  font-size: 1.25em;
 `;
 
 interface State {
@@ -48,9 +49,12 @@ export const Chart = (props: ChartProps) => {
   });
 
   // console.log('DATA:', data);
+  if (!locations.length) {
+    return <NoData>Search for locations to display data.</NoData>;
+  }
 
   if (loading) {
-    return <Loading>Loading...</Loading>;
+    return <NoData>Loading...</NoData>;
   }
 
   if (error) {

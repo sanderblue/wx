@@ -9,7 +9,7 @@ import { Nav } from '@wx/ui';
 import '../assets/styles.css';
 import Sidebar from './components/sidebar';
 import Home from './containers/home';
-import { parseJSON } from './utils';
+import { parseJSON, parseQueryParams, updateQueryParam } from './utils';
 
 const client = new ApolloClient({
   uri: 'https://localhost:3333/graphql',
@@ -17,7 +17,7 @@ const client = new ApolloClient({
 
 function updateQueryParams(data): URLSearchParams {
   const queryP = new URLSearchParams(window.location.search);
-  const params = parseJSON(queryP.get('query'), []);
+  const params = parseJSON<string[]>(queryP.get('query'), []);
 
   console.log('updateQueryParams:', params);
 
@@ -33,10 +33,26 @@ function updateQueryParams(data): URLSearchParams {
 export const App = (props: RouteComponentProps) => {
   const { history } = props;
 
-  const updateState = (d: any) => {
+  function updateState(d: any) {
     const queryParams = updateQueryParams(d.location);
     history.push(`?${queryParams.toString()}`);
-  };
+  }
+
+  function removeLocation(l: string) {
+    const queryParams = new URLSearchParams(props.location.search);
+    const parsed = parseQueryParams(queryParams);
+    const locations = parseJSON<string[]>(parsed.query, []).filter((loc) => {
+      return l !== loc;
+    });
+
+    if (!locations.length) {
+      return history.push('');
+    }
+
+    queryParams.set('query', JSON.stringify(locations));
+
+    history.push(`?${queryParams.toString()}`);
+  }
 
   return (
     <ApolloProvider client={client}>
@@ -46,7 +62,12 @@ export const App = (props: RouteComponentProps) => {
         <Sidebar></Sidebar>
 
         <main className="main-content flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5">
-          <Route path="/" component={Home} />
+          <Route
+            path="/"
+            render={(props) => (
+              <Home {...props} onClickRemoveLocation={removeLocation} />
+            )}
+          />
         </main>
       </div>
     </ApolloProvider>

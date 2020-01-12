@@ -23,3 +23,13 @@ export function parseJSON<T>(json: string, fallbackReturn: T): T {
     return fallbackReturn;
   }
 }
+
+export function updateQueryParam(
+  params: URLSearchParams,
+  key: string,
+  value: string,
+): URLSearchParams {
+  params.set(key, value);
+
+  return params;
+}

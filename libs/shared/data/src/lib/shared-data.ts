@@ -1,3 +1,10 @@
+export interface AppState {
+  location: string;
+  locations: string[];
+  startDate: string;
+  endDate: string;
+}
+
 export interface SnowDepthObservationDaily {
   id: number;
   location: string;

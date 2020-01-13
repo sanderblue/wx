@@ -22,7 +22,7 @@ const store: Store = {
 };
 
 interface AutocompleteProps extends RouteComponentProps {
-  onSelectResult: Function;
+  onSelectResult?: Function;
 }
 
 export const Autocomplete = (props: AutocompleteProps) => {
@@ -30,10 +30,11 @@ export const Autocomplete = (props: AutocompleteProps) => {
 
   const client = useApolloClient();
   const [state, setState] = useState({
+    searchValue: '',
     items: [],
   });
 
-  async function onKeyUp(event: any) {
+  async function onChangeSearch(event: any) {
     const q = event.target.value.trim();
 
     if (!q) {
@@ -48,11 +49,13 @@ export const Autocomplete = (props: AutocompleteProps) => {
     });
 
     setState({
+      ...state,
+      searchValue: q,
       items: results.data.weatherStations,
     });
   }
 
-  function onClickItem(item: any) {
+  function onClickItem(item: WxStation) {
     store.items = [...store.items, item];
 
     if (!store.locations.includes(item.location)) {
@@ -60,6 +63,8 @@ export const Autocomplete = (props: AutocompleteProps) => {
     }
 
     setState({
+      ...state,
+      searchValue: item.location,
       items: [],
     });
 
@@ -72,7 +77,8 @@ export const Autocomplete = (props: AutocompleteProps) => {
         type="search"
         placeholder="Search"
         className="w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 pl-10 appearance-none leading-normal"
-        onKeyUp={onKeyUp}
+        onChange={onChangeSearch}
+        value={state.searchValue}
       />
       <StyledIcon className="absolute search-icon">
         <svg

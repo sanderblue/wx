@@ -6,19 +6,44 @@ import { Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import Sidebar from './components/sidebar';
 import Home from './containers/home';
 import { Nav } from '@wx/ui';
-import { addLocationToQuery, removeLocationFromQuery } from './utils';
+import {
+  removeLocationFromQuery,
+  getLocationsFromQueryString,
+  buildQueryParams,
+} from './utils';
 import { apolloClient } from './components/graphql-client';
-import { WxStation } from '@wx/shared/data';
+import { AppState } from '@wx/shared/data';
 
 export const App = (props: RouteComponentProps) => {
-  const { history } = props;
+  const { history, location } = props;
 
-  function updateState(d: WxStation) {
-    const queryParams = addLocationToQuery(d.location);
-    history.push(`?${queryParams.toString()}`);
+  function updateAppState(state: AppState) {
+    // console.log('updateAppState:', state);
+
+    const locations = getLocationsFromQueryString(location.search);
+
+    if (!locations.includes(state.location)) {
+      locations.push(state.location);
+    }
+
+    const appState: AppState = {
+      ...state,
+      locations: locations,
+    };
+
+    console.log('updateAppState:', appState);
+
+    const qp = buildQueryParams({
+      locations: appState.locations,
+      startDate: appState.startDate,
+      endDate: appState.endDate,
+    });
+
+    console.log('buildQueryParams:', qp.toString());
+
+    history.push(`?${qp.toString()}`);
   }
 
   function removeLocation(l: string) {
@@ -34,7 +59,7 @@ export const App = (props: RouteComponentProps) => {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <Nav onSelectSearchResult={updateState}></Nav>
+      <Nav updateAppState={updateAppState}></Nav>
 
       <div className="flex flex-col">
         <main className="main-content flex-1 bg-gray-100">

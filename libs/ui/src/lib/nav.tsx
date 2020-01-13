@@ -1,7 +1,6 @@
 import React from 'react';
 import Autocomplete from './autocomplete';
 
-/* eslint-disable-next-line */
 export interface NavProps {
   onSelectSearchResult?: Function;
 }
@@ -10,41 +9,22 @@ export const Nav = (props: NavProps) => {
   const { onSelectSearchResult } = props;
 
   return (
-    <nav className="bg-gray-900 pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto fixed w-full z-20 top-0">
-      <div className="flex flex-wrap items-center">
-        <div className="flex flex-shrink md:w-1/3 justify-center md:justify-start text-white">
-          <a href="#">
-            <span className="text-xl pl-2">
-              <i className="em em-grinning"></i>
-            </span>
-          </a>
+    <nav className="bg-gray-900 p-3 text-white">
+      <div className="flex justify-between">
+        <div className="mr-4 w-108 relative">
+          <Autocomplete onSelectResult={onSelectSearchResult}></Autocomplete>
         </div>
-
-        <div className="flex flex-1 md:w-1/3 justify-center md:justify-start text-white px-2">
-          <span className="relative w-full">
-            <Autocomplete onSelectResult={onSelectSearchResult}></Autocomplete>
-          </span>
+        <div className="mr-4">
+          <input
+            placeholder="Start Date (YYYY-MM-DD)"
+            className="w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 appearance-none leading-normal"
+          />
         </div>
-
-        <div className="flex w-full pt-2 content-center justify-between md:w-1/3 md:justify-end">
-          <ul className="list-reset flex justify-between flex-1 md:flex-none items-center">
-            <li className="flex-1 md:flex-none md:mr-3">
-              <a
-                className="inline-block py-2 px-4 text-white no-underline"
-                href="#"
-              >
-                Active
-              </a>
-            </li>
-            <li className="flex-1 md:flex-none md:mr-3">
-              <a
-                className="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-                href="#"
-              >
-                Link
-              </a>
-            </li>
-          </ul>
+        <div className="mr-4 last:mr-0">
+          <input
+            placeholder="End Date (YYYY-MM-DD)"
+            className="w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 appearance-none leading-normal"
+          />
         </div>
       </div>
     </nav>

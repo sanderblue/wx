@@ -1,19 +1,16 @@
 import React from 'react';
 import Chart from '../components/chart';
 import { RouteComponentProps } from 'react-router-dom';
-import { parseQueryParams, parseJSON } from '../utils';
-import remove from 'lodash/remove';
+import { getLocationsFromQueryString } from '../utils';
 
 export interface HomeProps extends RouteComponentProps {
   onClickRemoveLocation?: Function;
 }
 
 export const Home = (props: HomeProps) => {
-  const parsed = parseQueryParams(new URLSearchParams(props.location.search));
-
   console.log('HOME::props:', props);
 
-  const locations = parseJSON<string[]>(parsed.query, []);
+  const locations = getLocationsFromQueryString(props.location.search);
 
   return (
     <section>

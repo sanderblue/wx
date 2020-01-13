@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useApolloClient } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { WxStation, WxStations, GET_WEATHER_STATIONS } from '@wx/shared/data';
 
 const StyledAutoComplete = styled.div``;
 const StyledIcon = styled.div`
@@ -10,16 +10,8 @@ const StyledIcon = styled.div`
   left: 0.8rem;
 `;
 
-export const GET_WEATHER_STATIONS = gql`
-  query weatherStations($query: String!) {
-    weatherStations(query: $query) {
-      location
-    }
-  }
-`;
-
 interface Store {
-  items: any[];
+  items: WxStation[];
   locations: string[];
 }
 
@@ -28,14 +20,6 @@ const store: Store = {
   items: [],
   locations: [],
 };
-
-interface WxStation {
-  location: string;
-}
-
-interface WxStations {
-  weatherStations: WxStation[];
-}
 
 interface AutocompleteProps extends RouteComponentProps {
   onSelectResult: Function;

@@ -12,6 +12,14 @@ export interface ObjectLiteral {
   [key: string]: any;
 }
 
+export interface WxStation {
+  location: string;
+}
+
+export interface WxStations {
+  weatherStations: WxStation[];
+}
+
 export const weatherStations = [
   {
     location: 'MtBakerHeatherMeadows',

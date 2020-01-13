@@ -24,12 +24,42 @@ export function parseJSON<T>(json: string, fallbackReturn: T): T {
   }
 }
 
-export function updateQueryParam(
-  params: URLSearchParams,
-  key: string,
-  value: string,
-): URLSearchParams {
-  params.set(key, value);
+export function addLocationToQuery(location: string): URLSearchParams {
+  const queryP = new URLSearchParams(window.location.search);
+  const locations = parseJSON<string[]>(queryP.get('query'), []);
 
-  return params;
+  if (!locations.includes(location)) {
+    locations.push(location);
+  }
+
+  queryP.set('query', JSON.stringify(locations));
+
+  return queryP;
+}
+
+export function removeLocationFromQuery(
+  queryString: string,
+  location: string,
+): URLSearchParams {
+  const qp = new URLSearchParams(queryString);
+  const parsed = parseQueryParams(qp);
+  const locations = parseJSON<string[]>(parsed.query, []).filter((loc) => {
+    return location !== loc;
+  });
+
+  if (!locations.length) {
+    qp.delete('query');
+
+    return qp;
+  }
+
+  qp.set('query', JSON.stringify(locations));
+
+  return qp;
+}
+
+export function getLocationsFromQueryString(queryString: string): string[] {
+  const parsed = parseQueryParams(new URLSearchParams(queryString));
+
+  return parseJSON<string[]>(parsed.query, []);
 }

@@ -38,6 +38,7 @@ testem.log
 
 # CSS
 apps/**/*.css
+tailwindcss-default.config.js
 
 # System Files
 .DS_Store

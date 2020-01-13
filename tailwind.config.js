@@ -3,23 +3,16 @@ module.exports = {
     fontFamily: {
       body: ['Avenir', 'sans-serif'],
     },
-    extend: {},
-    theme: {
-      borderWidth: {
-        'default': '1px',
-        '0': '0',
-        '1': '1px',
-        '2': '2px',
-        '3': '3px',
-        '4': '4px',
-        '5': '5px',
-        '6': '6px',
-        '8': '8px',
+    extend: {
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '108': '30rem',
       },
     },
   },
   variants: {
-    borderWidth: ['responsive', 'last', 'hover', 'focus'],
+    margin: ['responsive', 'last'],
   },
-  plugins: [],
 };

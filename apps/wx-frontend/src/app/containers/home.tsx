@@ -14,7 +14,10 @@ export const Home = (props: HomeProps) => {
 
   return (
     <section>
-      <div className="bg-blue-800 p-3 shadow text-white">
+      <div className="p-4">
+        <Chart locations={locations}></Chart>
+      </div>
+      <div className="p-3 shadow text-white">
         <ul className="list-reset flex text-sm min-h-2">
           {locations.map((location, i) => {
             return (
@@ -37,10 +40,6 @@ export const Home = (props: HomeProps) => {
             );
           })}
         </ul>
-      </div>
-
-      <div className="p-4">
-        <Chart locations={locations}></Chart>
       </div>
     </section>
   );

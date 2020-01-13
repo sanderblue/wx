@@ -84,7 +84,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
         </svg>
       </StyledIcon>
       {state.items.length > 0 && (
-        <ul className="absolute w-full bg-gray-800 border-gray-700 rounded">
+        <ul className="absolute z-10 w-full bg-gray-800 border-gray-700 rounded">
           {state.items.map((item, index) => {
             const c = index === state.items.length - 1 ? true : false;
 

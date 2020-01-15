@@ -12,6 +12,7 @@ import {
   removeLocationFromQuery,
   getLocationsFromQueryString,
   buildQueryParams,
+  parseQueryString,
 } from './utils';
 import { apolloClient } from './components/graphql-client';
 import { AppState } from '@wx/shared/data';
@@ -22,13 +23,17 @@ export const App = (props: RouteComponentProps) => {
   function updateAppState(state: AppState) {
     const locations = getLocationsFromQueryString(location.search);
 
+    // const s = parseQueryString(props.location.search);
+
     if (!locations.includes(state.location)) {
       locations.push(state.location);
     }
 
     const appState: AppState = {
       ...state,
-      locations: locations,
+      locations,
+      // startDate: s.startDate,
+      // endDate: s.endDate,
     };
 
     console.log('updateAppState:', appState);

@@ -19,8 +19,8 @@ export const Nav = (props: NavProps) => {
 
   const [state, setState] = useState({
     location: '',
-    startDate: '',
-    endDate: '',
+    startDate: defaultStartDate,
+    endDate: defaultEndDate,
   });
 
   function onSelectSearchResult(result: WxStation) {

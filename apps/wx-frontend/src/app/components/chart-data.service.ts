@@ -33,7 +33,12 @@ export function getNurmericalSeriesData<T>(data: T[], key: string): number[] {
   return data.map((o) => o[key]).reverse();
 }
 
-export function generateSeries(locations: any[], obs): Series {
+export function generateSeries(
+  locations: any[],
+  startDate: string,
+  endDate: string,
+  obs,
+): Series {
   let xAxisLabels: string[] = [];
 
   const series = locations.map((location) => {
@@ -43,8 +48,8 @@ export function generateSeries(locations: any[], obs): Series {
     const dataSet = orderBy(matched, ['date'], ['desc']);
     const dataSeries = getDataForDateRange(
       dataSet,
-      new Date('2019-011-20'),
-      new Date(),
+      new Date(startDate),
+      new Date(endDate),
     );
 
     xAxisLabels = dataSeries.map((o) => o.date).reverse();

@@ -1,7 +1,7 @@
 import React from 'react';
 import Chart from '../components/chart';
 import { RouteComponentProps } from 'react-router-dom';
-import { getLocationsFromQueryString } from '../utils';
+import { getLocationsFromQueryString, parseQueryString } from '../utils';
 
 export interface HomeProps extends RouteComponentProps {
   onClickRemoveLocation?: Function;
@@ -12,16 +12,24 @@ export const Home = (props: HomeProps) => {
 
   const { onClickRemoveLocation } = props;
 
-  const locations = getLocationsFromQueryString(props.location.search);
+  // const locations = getLocationsFromQueryString(props.location.search);
+  // const startDate = getStartDateFromQueryString(props.location.search);
+  // const endDate = getEndDateFromQueryString(props.location.search);
+
+  const state = parseQueryString(props.location.search);
 
   return (
     <section>
       <div className="p-4">
-        <Chart locations={locations}></Chart>
+        <Chart
+          locations={state.locations}
+          startDate={state.startDate}
+          endDate={state.endDate}
+        ></Chart>
       </div>
       <div className="p-3 shadow text-white">
         <ul className="list-reset flex text-sm min-h-2">
-          {locations.map((location, i) => {
+          {state.locations.map((location, i) => {
             return (
               <li
                 className="flex mr-3 bg-gray-600 rounded py-1 px-2 text-blue"

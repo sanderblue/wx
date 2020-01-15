@@ -21,25 +21,19 @@ interface State {
   series: ApexAxisChartSeries;
 }
 
-interface Store {
-  locations: string[];
-  series: ApexAxisChartSeries;
-}
-
 interface ChartProps {
   locations: string[];
+  startDate: string;
+  endDate: string;
 }
-
-const STORE: Store = {
-  locations: [],
-  series: [],
-};
 
 /**
  * Component
  */
 export const Chart = (props: ChartProps) => {
   console.log('Chart::props', props);
+
+  const { startDate, endDate } = props;
 
   const locations = props.locations || [];
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
@@ -63,7 +57,12 @@ export const Chart = (props: ChartProps) => {
 
   const obs: any[] = data ? data.observations : [];
 
-  const { series, xAxisLabels } = generateSeries(locations, obs);
+  const { series, xAxisLabels } = generateSeries(
+    locations,
+    startDate,
+    endDate,
+    obs,
+  );
 
   const chartOptions: ApexOptions = {
     chart: {

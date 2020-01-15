@@ -1,8 +1,6 @@
 import { ObjectLiteral } from '@wx/shared/data';
 
-export function parseQueryParams(
-  queryParams: URLSearchParams,
-): { [key: string]: any } {
+export function parseQueryParams(queryParams: URLSearchParams): ObjectLiteral {
   const p = {};
 
   queryParams.forEach((value, key) => {
@@ -62,6 +60,18 @@ export function getLocationsFromQueryString(queryString: string): string[] {
   const parsed = parseQueryParams(new URLSearchParams(queryString));
 
   return parseJSON<string[]>(parsed.locations, []);
+}
+
+export function parseQueryString(qs: string): ObjectLiteral {
+  const parsed = parseQueryParams(new URLSearchParams(qs));
+
+  const locations = parseJSON<string[]>(parsed.locations, []);
+
+  return {
+    locations,
+    startDate: parsed.startDate,
+    endDate: parsed.endDate,
+  };
 }
 
 export function buildQueryParams(items: ObjectLiteral) {

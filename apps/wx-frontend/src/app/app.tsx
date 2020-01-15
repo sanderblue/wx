@@ -20,8 +20,6 @@ export const App = (props: RouteComponentProps) => {
   const { history, location } = props;
 
   function updateAppState(state: AppState) {
-    // console.log('updateAppState:', state);
-
     const locations = getLocationsFromQueryString(location.search);
 
     if (!locations.includes(state.location)) {

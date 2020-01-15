@@ -24,12 +24,12 @@ export const Home = (props: HomeProps) => {
           {locations.map((location, i) => {
             return (
               <li
-                className="mr-3 bg-gray-600 rounded py-1 px-2 text-blue"
+                className="flex mr-3 bg-gray-600 rounded py-1 px-2 text-blue"
                 key={i}
               >
-                <span className="inline-block mr-2">{location}</span>
+                <span className="self-center mr-2">{location}</span>
                 <svg
-                  className="fill-current inline-block h-4 w-4"
+                  className="self-center fill-current h-4 w-4"
                   role="button"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"

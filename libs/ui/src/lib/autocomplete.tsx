@@ -4,10 +4,9 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useApolloClient } from '@apollo/react-hooks';
 import { WxStation, WxStations, GET_WEATHER_STATIONS } from '@wx/shared/data';
 
-const StyledAutoComplete = styled.div``;
 const StyledIcon = styled.div`
-  top: 0.5rem;
-  left: 0.8rem;
+  top: 0.6rem;
+  left: 0.5rem;
 `;
 
 interface Store {
@@ -38,6 +37,12 @@ export const Autocomplete = (props: AutocompleteProps) => {
     const q = event.target.value.trim();
 
     if (!q) {
+      setState({
+        ...state,
+        searchValue: q,
+        items: [],
+      });
+
       return;
     }
 
@@ -72,17 +77,17 @@ export const Autocomplete = (props: AutocompleteProps) => {
   }
 
   return (
-    <StyledAutoComplete>
+    <div className="relative">
       <input
         type="search"
-        placeholder="Search"
-        className="w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 pl-10 appearance-none leading-normal"
+        placeholder=""
+        className="w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 pl-6 appearance-none leading-normal"
         onChange={onChangeSearch}
         value={state.searchValue}
       />
       <StyledIcon className="absolute search-icon">
         <svg
-          className="fill-current pointer-events-none text-white w-4 h-4"
+          className="fill-current pointer-events-none text-white w-3 h-3"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
         >
@@ -102,7 +107,9 @@ export const Autocomplete = (props: AutocompleteProps) => {
               >
                 <div
                   className={
-                    c ? 'mx-2 p-2' : 'mx-2 p-2 border-b border-gray-700'
+                    c
+                      ? 'text-sm mx-2 p-2'
+                      : 'text-sm mx-2 p-2 border-b border-gray-700'
                   }
                 >
                   {item.location}
@@ -112,7 +119,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
           })}
         </ul>
       )}
-    </StyledAutoComplete>
+    </div>
   );
 };
 

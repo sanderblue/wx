@@ -1,4 +1,5 @@
 import React, { FormEvent, useState } from 'react';
+import moment from 'moment';
 import Autocomplete from './autocomplete';
 import { WxStation } from '@wx/shared/data';
 
@@ -9,6 +10,12 @@ export interface NavProps {
 
 export const Nav = (props: NavProps) => {
   const { updateAppState } = props;
+
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const defaultStartYear = currentYear - 1;
+  const defaultStartDate = `${defaultStartYear}-10-01`;
+  const defaultEndDate = moment().format('YYYY-MM-DD');
 
   const [state, setState] = useState({
     location: '',
@@ -49,26 +56,37 @@ export const Nav = (props: NavProps) => {
     <nav className="bg-gray-900 p-3 text-white">
       <form onSubmit={onSubmitForm} className="flex justify-between">
         <div className="mr-4 w-108 relative">
+          <label className="block text-gray-500 text-xs font-bold">
+            Search
+          </label>
           <Autocomplete onSelectResult={onSelectSearchResult}></Autocomplete>
         </div>
         <div className="mr-2">
+          <label className="block text-gray-500 text-xs font-bold">
+            Start Date
+          </label>
           <input
-            value={state.startDate}
+            // value={state.startDate}
             onChange={onChangeStartDate}
-            placeholder="Start Date (YYYY-MM-DD)"
+            defaultValue={defaultStartDate}
+            placeholder="YYYY-MM-DD"
             className="w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 appearance-none leading-normal"
           />
         </div>
         <div className="mr-2">
+          <label className="block text-gray-500 text-xs font-bold">
+            End Date
+          </label>
           <input
-            value={state.endDate}
+            // value={state.endDate}
+            defaultValue={defaultEndDate}
             onChange={onChangeEndDate}
-            placeholder="End Date (YYYY-MM-DD)"
+            placeholder="YYYY-MM-DD"
             className="w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 appearance-none leading-normal"
           />
         </div>
-        <div className="mr-2 last:mr-0">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1 rounded">
+        <div className="flex mr-2 last:mr-0">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1 rounded self-end">
             Go
           </button>
         </div>

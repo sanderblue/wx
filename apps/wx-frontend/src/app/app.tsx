@@ -12,7 +12,6 @@ import {
   removeLocationFromQuery,
   getLocationsFromQueryString,
   buildQueryParams,
-  parseQueryString,
 } from './utils';
 import { apolloClient } from './components/graphql-client';
 import { AppState } from '@wx/shared/data';
@@ -23,8 +22,6 @@ export const App = (props: RouteComponentProps) => {
   function updateAppState(state: AppState) {
     const locations = getLocationsFromQueryString(location.search);
 
-    // const s = parseQueryString(props.location.search);
-
     if (!locations.includes(state.location)) {
       locations.push(state.location);
     }
@@ -32,8 +29,6 @@ export const App = (props: RouteComponentProps) => {
     const appState: AppState = {
       ...state,
       locations,
-      // startDate: s.startDate,
-      // endDate: s.endDate,
     };
 
     console.log('updateAppState:', appState);
@@ -43,8 +38,6 @@ export const App = (props: RouteComponentProps) => {
       startDate: appState.startDate,
       endDate: appState.endDate,
     });
-
-    console.log('buildQueryParams:', qp.toString());
 
     history.push(`?${qp.toString()}`);
   }
@@ -64,7 +57,7 @@ export const App = (props: RouteComponentProps) => {
     <ApolloProvider client={apolloClient}>
       <Nav updateAppState={updateAppState}></Nav>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col min-h-full">
         <main className="main-content flex-1 bg-gray-100">
           <Route
             path="/"

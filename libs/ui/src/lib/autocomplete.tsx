@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useApolloClient } from '@apollo/react-hooks';
@@ -26,6 +26,11 @@ interface AutocompleteProps extends RouteComponentProps {
 
 export const Autocomplete = (props: AutocompleteProps) => {
   const { onSelectResult } = props;
+  let textInput = null;
+
+  useEffect(() => {
+    textInput.focus();
+  }, []);
 
   const client = useApolloClient();
   const [state, setState] = useState({
@@ -84,6 +89,9 @@ export const Autocomplete = (props: AutocompleteProps) => {
         className="w-full bg-gray-800 text-sm text-white transition border border-transparent focus:outline-none focus:border-gray-700 rounded py-1 px-2 pl-6 appearance-none leading-normal"
         onChange={onChangeSearch}
         value={state.searchValue}
+        ref={(button) => {
+          textInput = button;
+        }}
       />
       <StyledIcon className="absolute search-icon">
         <svg

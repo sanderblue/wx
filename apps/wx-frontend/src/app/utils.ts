@@ -53,6 +53,11 @@ export function removeLocationFromQuery(
 
   qp.set('locations', JSON.stringify(locations));
 
+  const qpAfter = new URLSearchParams(qp.toString());
+  const parsedAfter = parseQueryParams(qpAfter);
+
+  console.log(`Removed Location '${location}':`, parsedAfter);
+
   return qp;
 }
 

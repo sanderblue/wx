@@ -46,6 +46,7 @@ export const Nav = (props: NavProps) => {
 
   function onSubmitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     updateAppState(state);
   }
 

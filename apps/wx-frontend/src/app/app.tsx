@@ -22,7 +22,7 @@ export const App = (props: RouteComponentProps) => {
   function updateAppState(state: AppState) {
     const locations = getLocationsFromQueryString(location.search);
 
-    if (!locations.includes(state.location)) {
+    if (state.location && !locations.includes(state.location)) {
       locations.push(state.location);
     }
 

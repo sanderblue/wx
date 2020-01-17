@@ -67,7 +67,7 @@ export const Chart = (props: ChartProps) => {
   const chartOptions: ApexOptions = {
     chart: {
       id: 'basic-line',
-      height: 400,
+      height: '500px',
       type: 'line',
       fontFamily: 'Avenir',
     },
@@ -80,6 +80,13 @@ export const Chart = (props: ChartProps) => {
         },
       },
     },
+    yaxis: {
+      tickAmount: 10,
+      labels: {
+        align: 'left',
+        // offsetX: 100,
+      },
+    },
     stroke: {
       curve: 'stepline',
     },
@@ -90,14 +97,15 @@ export const Chart = (props: ChartProps) => {
     series,
   };
 
-  return (
-    <div>
-      <h1>Snow Depth</h1>
+  console.log('CHART state:', state);
 
-      <div id="chart">
-        <ReactApexChart options={state.options} series={state.series} />
-      </div>
-    </div>
+  return (
+    <ReactApexChart
+      options={state.options}
+      series={state.series}
+      height="100%"
+      width="100%"
+    />
   );
 };
 

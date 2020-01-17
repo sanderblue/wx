@@ -20,10 +20,10 @@ export const Home = (props: HomeProps) => {
         <div className="flex justify-center p-4">
           <div
             id="chart"
-            className="min-h-6 w-full max-h-4 md:max-h-6 lg:max-w-5xl"
+            className="min-h-6 w-full max-h-4 md:max-h-7 lg:max-w-5xl"
           >
             <h1 className="w-full max-w-5xl">Snow Depth</h1>
-            <div className="w-full h-400">
+            <div className="w-full h-400 md:h-600">
               <Chart
                 locations={state.locations}
                 startDate={state.startDate}

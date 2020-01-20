@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { parseQueryString } from '../utils';
-import Chart from '../components/chart';
+// import Chart from '../components/chart';
 
 export interface HomeProps extends RouteComponentProps {
   onClickRemoveLocation?: Function;
@@ -22,11 +22,11 @@ export const Home = (props: HomeProps) => {
           >
             <h1 className="w-full max-w-5xl">Snow Depth</h1>
             <div className="w-full h-400 md:h-600">
-              <Chart
+              {/* <Chart
                 locations={state.locations}
                 startDate={state.startDate}
                 endDate={state.endDate}
-              ></Chart>
+              ></Chart> */}
             </div>
             <div className="overflow-hidden">
               <ul className="list-reset flex text-sm text-white shadow overflow-x-scroll">

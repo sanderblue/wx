@@ -12,6 +12,7 @@ cache:
 build:
   stage: build
   script:
+    - npm install -g ng-tailwindcss
     - npm install
     - npm run build:wx-backend --prod
     - npm run build:wx-frontend --prod

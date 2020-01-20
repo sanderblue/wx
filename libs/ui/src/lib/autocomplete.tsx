@@ -41,15 +41,15 @@ export const Autocomplete = (props: AutocompleteProps) => {
   async function onChangeSearch(event: any) {
     const q = event.target.value.trim();
 
-    if (!q) {
-      setState({
-        ...state,
-        searchValue: q,
-        items: [],
-      });
+    // if (!q) {
+    //   setState({
+    //     ...state,
+    //     searchValue: q,
+    //     items: [],
+    //   });
 
-      return;
-    }
+    //   return;
+    // }
 
     const results = await client.query<WxStations>({
       query: GET_WEATHER_STATIONS,

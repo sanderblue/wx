@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from '@emotion/styled';
+import values from 'lodash/values';
 import { useQuery } from '@apollo/react-hooks';
 
 import { generateSeries } from './chart-data.service';
 import { ApexOptions } from 'apexcharts';
 import { GET_OBSERVATIONS } from '../graphql/queries';
+import { locationColorMap } from '@wx/shared/data';
 
 const NoData = styled.div`
   height: 400px;
@@ -71,6 +73,7 @@ export const Chart = (props: ChartProps) => {
       type: 'line',
       fontFamily: 'Avenir',
     },
+    colors: values(locationColorMap),
     xaxis: {
       categories: xAxisLabels,
       type: 'datetime',

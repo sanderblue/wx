@@ -1,6 +1,3 @@
-// Styles
-import '../assets/styles.css';
-
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -15,6 +12,9 @@ import {
 } from './utils';
 import { apolloClient } from './components/graphql-client';
 import { AppState } from '@wx/shared/data';
+
+// Styles
+import '../assets/styles.css';
 
 export const App = (props: RouteComponentProps) => {
   const { history, location } = props;

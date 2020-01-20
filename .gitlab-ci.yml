@@ -12,6 +12,8 @@ cache:
 build:
   stage: build
   script:
+    - npm install -g @nrwl/cli
+    - npm install -g @angular/cli
     - npm install -g ng-tailwindcss
     - npm install
     - npm run build:wx-frontend

@@ -140,8 +140,7 @@
             "tsConfig": "apps/wx-frontend/tsconfig.app.json",
             "assets": [
               "apps/wx-frontend/src/favicon.ico",
-              "apps/wx-frontend/src/assets",
-              "apps/wx-frontend/src/assets/data/data.json"
+              "apps/wx-frontend/src/assets"
             ],
             "styles": [],
             "scripts": [],

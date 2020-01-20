@@ -5,15 +5,18 @@ stages:
   - deploy
 
 cache:
-  key: "${CI_COMMIT_REF_SLUG}"
+  key: '${CI_COMMIT_REF_SLUG}'
   paths:
     - node_modules/
 
 build:
   stage: build
   script:
+    - ls
     - npm install -g typescript @nrwl/cli @angular/cli ng-tailwindcss
     - npm install
+    - npm run ng --version
+    - npm run nx --version
     - npm run build:wx-frontend
   artifacts:
     paths:

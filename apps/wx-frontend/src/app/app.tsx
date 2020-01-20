@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-import Home from './containers/home';
+import { Home } from './containers/home';
 import { Nav } from '@wx/ui';
 import {
   removeLocationFromQuery,

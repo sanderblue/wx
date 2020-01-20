@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { parseQueryString } from '../utils';
-import Chart from '../components/chart';
+import { Chart } from '../components/chart';
 
 export interface HomeProps extends RouteComponentProps {
   onClickRemoveLocation?: Function;

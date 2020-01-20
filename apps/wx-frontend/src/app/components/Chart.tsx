@@ -2,10 +2,10 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from '@emotion/styled';
 import values from 'lodash/values';
+import { ApexOptions } from 'apexcharts';
 import { useQuery } from '@apollo/react-hooks';
 
 import { generateSeries } from './chart-data.service';
-import { ApexOptions } from 'apexcharts';
 import { GET_OBSERVATIONS } from '../graphql/queries';
 import { locationColorMap } from '@wx/shared/data';
 

@@ -6,7 +6,6 @@
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": [],
     "target": "ES6"
   },
   "exclude": ["**/*.spec.ts", "**/*.spec.tsx"],

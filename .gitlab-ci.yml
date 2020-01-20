@@ -29,6 +29,8 @@ build:
 deploy:
   stage: deploy
   when: manual
+  only:
+    - master
   script:
     # Inject the remote's private key
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -44,6 +46,3 @@ deploy:
 
     # Non interactive ssh gracefully reloads server
     - ssh $VPS_USER@$VPS_IP_ADDRESS '. /etc/profile; pm2 reload all'
-
-  only:
-    - master

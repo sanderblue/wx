@@ -16,8 +16,7 @@ build:
     - npm install -g @angular/cli
     - npm install -g ng-tailwindcss
     - npm install
-    - npm run build:wx-frontend
-    - npm run build:wx-backend
+    - npm run build wx-frontend
   artifacts:
     paths:
       - dist/
@@ -26,7 +25,6 @@ build:
       - package.json
       - angular.json
       - nx.json
-      - tsconfig.json
       - ng-tailwind.js
 
 deploy:

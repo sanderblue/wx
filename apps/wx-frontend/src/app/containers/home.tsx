@@ -8,8 +8,6 @@ export interface HomeProps extends RouteComponentProps {
 }
 
 export const Home = (props: HomeProps) => {
-  console.log('HOME::props:', props);
-
   const { onClickRemoveLocation } = props;
 
   const state = parseQueryString(props.location.search);

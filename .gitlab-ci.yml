@@ -16,8 +16,7 @@ build:
     - npm install -g @angular/cli
     - npm install -g ng-tailwindcss
     - npm install
-    - ngtw build
-    - npm run build wx-frontend
+    - npm run build:wx-frontend
   artifacts:
     paths:
       - dist/

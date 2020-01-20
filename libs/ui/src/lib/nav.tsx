@@ -64,7 +64,6 @@ export const Nav = (props: NavProps) => {
             Start Date
           </label>
           <input
-            // value={state.startDate}
             onChange={onChangeStartDate}
             defaultValue={defaultStartDate}
             placeholder="YYYY-MM-DD"
@@ -76,7 +75,6 @@ export const Nav = (props: NavProps) => {
             End Date
           </label>
           <input
-            // value={state.endDate}
             defaultValue={defaultEndDate}
             onChange={onChangeEndDate}
             placeholder="YYYY-MM-DD"

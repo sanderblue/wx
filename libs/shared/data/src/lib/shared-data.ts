@@ -76,7 +76,7 @@ export const locationColorMap = {
   TimberlineLodge: '#2E93fA',
   MtHoodMeadowsBase: '#66DA26',
   MtBakerHeatherMeadows: '#546E7A',
-  CrystalBase: '#F23272',
+  CrystalBase: '#F23E7A',
   CrystalCampbellBasin: '#FF9800',
   CrystalGreenValley: '#c987e6',
   SkibowlSummit: '#ffff66',

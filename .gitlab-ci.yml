@@ -2,20 +2,19 @@ image: node:12
 
 stages:
   - build
-  # - test
-  # - push
-  # - deploy
+  - deploy
 
 cache:
-  key: "${CI_COMMIT_REF_SLUG}"
+  key: '${CI_COMMIT_REF_SLUG}'
   paths:
     - node_modules/
 
-build:backend:
+build:
   stage: build
   script:
     - npm install
-    - npm run build wx-backend --prod
+    - npm run build:wx-backend --prod
+    - npm run build:wx-frontend --prod
   artifacts:
     paths:
       - dist/
@@ -23,46 +22,28 @@ build:backend:
       - package-lock.json
       - package.json
       - angular.json
+      - nx.json
+      - tsconfig.json
+      - ng-tailwind.js
 
-build:frontend:
-  stage: build
+deploy:
+  stage: deploy
+  when: manual
   script:
-    - npm install
-    - npm run build wx-frontend --prod
-  artifacts:
-    paths:
-      - dist/
-      - node_modules/
-      - package-lock.json
-      - package.json
-      - angular.json
-# test:
-#   stage: test
-#   dependencies:
-#     - build
-#   script:
-#     - npm install
-#     - npm run test
+    # Inject the remote's private key
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
 
-# docker:build:
-#   stage: push
-#   image: docker:latest
-#   dependencies:
-#     - build
-#   services:
-#     - docker:dind
-#   script:
-#     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME} .
-#     - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
-#     - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME}
-#   only:
-#     - master
+    # Append keyscan output into known hosts
+    - ssh-keyscan $VPS_IP_ADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
 
-# deploy:
-#   stage: deploy
-#   image: thisiskj/kubectl-envsubst
-#   dependencies:
-#     - build
-#   script:
-#     - echo "Deploying all day"
-#     - kubectl apply -f helm/deployment.yaml
+    # Deploy code via rsync
+    - rsync -avuz --exclude=".*" $CI_PROJECT_DIR $VPS_USER@$VPS_IP_ADDRESS:~
+
+    # Non interactive ssh gracefully reloads server
+    - ssh $VPS_USER@$VPS_IP_ADDRESS '. /etc/profile; pm2 reload all'
+
+  only:
+    - master

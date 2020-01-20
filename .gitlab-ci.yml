@@ -1,0 +1,68 @@
+image: node:12
+
+stages:
+  - build
+  # - test
+  # - push
+  # - deploy
+
+cache:
+  key: "${CI_COMMIT_REF_SLUG}"
+  paths:
+    - node_modules/
+
+build:backend:
+  stage: build
+  script:
+    - npm install
+    - npm run build wx-backend --prod
+  artifacts:
+    paths:
+      - dist/
+      - node_modules/
+      - package-lock.json
+      - package.json
+      - angular.json
+
+build:frontend:
+  stage: build
+  script:
+    - npm install
+    - npm run build wx-frontend --prod
+  artifacts:
+    paths:
+      - dist/
+      - node_modules/
+      - package-lock.json
+      - package.json
+      - angular.json
+# test:
+#   stage: test
+#   dependencies:
+#     - build
+#   script:
+#     - npm install
+#     - npm run test
+
+# docker:build:
+#   stage: push
+#   image: docker:latest
+#   dependencies:
+#     - build
+#   services:
+#     - docker:dind
+#   script:
+#     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME} .
+#     - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
+#     - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME}
+#   only:
+#     - master
+
+# deploy:
+#   stage: deploy
+#   image: thisiskj/kubectl-envsubst
+#   dependencies:
+#     - build
+#   script:
+#     - echo "Deploying all day"
+#     - kubectl apply -f helm/deployment.yaml

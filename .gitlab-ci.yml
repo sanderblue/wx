@@ -34,6 +34,7 @@ deploy:
     - master
   script:
     # Inject the remote's private key
+    - eval "$(ssh-agent)"
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh

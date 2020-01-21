@@ -32,6 +32,8 @@ deploy:
   when: manual
   only:
     - master
+  dependencies:
+    - build
   script:
     # Inject the remote's private key
     - eval "$(ssh-agent)"
@@ -44,7 +46,7 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
 
     # Deploy code via rsync
-    - rsync -avuz --exclude=".*" $CI_PROJECT_DIR $VPS_USER@$VPS_IP_ADDRESS:~
+    - rsync -avuz --exclude=".*" $CI_PROJECT_DIR $VPS_USER@$VPS_IP_ADDRESS:/var/www/wx/
 
     # Non interactive ssh gracefully reloads server
     - ssh $VPS_USER@$VPS_IP_ADDRESS '. /etc/profile; pm2 reload all'

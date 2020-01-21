@@ -12,12 +12,11 @@ cache:
 build:
   stage: build
   script:
-    - ls
     - npm install -g typescript @nrwl/cli @angular/cli ng-tailwindcss
     - npm install
-    - npm run ng --version
-    - npm run nx --version
     - npm run build:wx-frontend
+    - npm run build:wx-backend
+    - npm run build:wx-backend-cron
   artifacts:
     paths:
       - dist/

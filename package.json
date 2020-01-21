@@ -12,6 +12,7 @@
     "start:wx-backend-cron": "PORT=4444 ng serve wx-backend-cron",
     "build": "ng build",
     "build:wx-backend": "ng build wx-backend",
+    "build:wx-backend-cron": "ng build wx-backend-cron",
     "build:wx-frontend": "ngtw build && ng build wx-frontend",
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",

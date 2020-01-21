@@ -34,17 +34,21 @@ deploy:
     - master
   dependencies:
     - build
-  script:
+  before_script:
     # Inject the remote's private key
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - eval "$(ssh-agent)"
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
 
     # Append keyscan output into known hosts
-    - ssh-keyscan $VPS_IP_ADDRESS >> ~/.ssh/known_hosts
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
 
+    # - ssh-keyscan $VPS_IP_ADDRESS >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts
+  script:
     # Deploy code via rsync
     - rsync -avuz --exclude=".*" $CI_PROJECT_DIR $VPS_USER@$VPS_IP_ADDRESS:/var/www/wx/
 

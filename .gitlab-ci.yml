@@ -34,6 +34,7 @@ deploy:
     - master
   dependencies:
     - build
+  image: ubuntu
   before_script:
     # Inject the remote's private key
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'

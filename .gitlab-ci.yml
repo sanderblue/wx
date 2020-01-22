@@ -15,4 +15,5 @@ deploy:
     - apt-get update -y
     - 'which ssh-agent || (apt-get install openssh-client -y)'
     - apt-get install sshpass -y
+    - which sshpass
     - sshpass -p ${VPS_PASSWORD} ssh sblue@$165.22.167.150

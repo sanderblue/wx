@@ -14,4 +14,4 @@ deploy:
   script:
     - apt-get update
     - apt-get install sshpass -y
-    - sshpass -p ${VPS_PASSWORD} ssh ${VPS_USER}@${VPS_IP_ADDRESS} 'mkdir /var/www/test-ci'
+    - sshpass -p ${VPS_PASSWORD} ssh ${VPS_USER}@${VPS_IP_ADDRESS} 'ls -la'

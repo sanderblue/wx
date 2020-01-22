@@ -1,15 +1,15 @@
 image: node:12
 
 stages:
-  - build
+  - deploy
 
 deploy:
   stage: deploy
   when: manual
   only:
     - master
-  dependencies:
-    - build
+  # dependencies:
+  #   - build
   image: ubuntu
   script:
     - sudo apt-get update

@@ -12,6 +12,6 @@ deploy:
   #   - build
   image: ubuntu
   script:
-    - sudo apt-get update
-    - sudo apt-get install sshpass -y
-    - sudo sshpass  -p ${VPS_PASSWORD} -v ssh -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_IP_ADDRESS} 'mkdir /var/www/test-ci'
+    - apt-get update
+    - apt-get install sshpass -y
+    - sshpass  -p ${VPS_PASSWORD} -v ssh -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_IP_ADDRESS} 'mkdir /var/www/test-ci'

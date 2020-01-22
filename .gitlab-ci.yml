@@ -35,27 +35,39 @@ deploy:
   dependencies:
     - build
   image: ubuntu
-  before_script:
-    # Inject the remote's private key
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - eval "$(ssh-agent)"
-
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    # - ssh-add <(echo "$SSH_PRIVATE_KEY")
-
-    # Append keyscan output into known hosts
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-
-    #  ssh-keyscan $VPS_IP_ADDRESS >> ~/.ssh/known_hosts
-    # - chmod 644 ~/.ssh/known_hosts
   script:
-    # Deploy code via rsync
-    - rsync -avuz --exclude=".*" $CI_PROJECT_DIR $VPS_USER@$VPS_IP_ADDRESS:/var/www/wx/
+    - sudo apt-get update
+    - sudo apt-get install sshpass -y
+    - sudo sshpass  -p ${VPS_PASSWORD} -v ssh -o StrictHostKeyChecking=no ${VPS_USER}@${VPS_IP_ADDRESS} 'mkdir /var/www/test-ci'
+# deploy:
+#   stage: deploy
+#   when: manual
+#   only:
+#     - master
+#   dependencies:
+#     - build
+#   image: ubuntu
+#   before_script:
+#     # Inject the remote's private key
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     - eval "$(ssh-agent)"
 
-    # Non interactive ssh gracefully reloads server
-    - ssh $VPS_USER@$VPS_IP_ADDRESS '. /etc/profile; pm2 reload all'
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+#     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+#     # - ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+#     # Append keyscan output into known hosts
+#     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+#     - chmod 644 ~/.ssh/known_hosts
+
+#     #  ssh-keyscan $VPS_IP_ADDRESS >> ~/.ssh/known_hosts
+#     # - chmod 644 ~/.ssh/known_hosts
+#   script:
+#     # Deploy code via rsync
+#     - rsync -avuz --exclude=".*" $CI_PROJECT_DIR $VPS_USER@$VPS_IP_ADDRESS:/var/www/wx/
+
+#     # Non interactive ssh gracefully reloads server
+#     - ssh $VPS_USER@$VPS_IP_ADDRESS '. /etc/profile; pm2 reload all'

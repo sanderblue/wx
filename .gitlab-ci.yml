@@ -17,4 +17,4 @@ deploy:
     - apt-get install sshpass -y
     - which ssh
     - which sshpass
-    - sshpass -p "${VPS_PASSWORD}" ssh sblue@165.22.167.150
+    - sshpass -p "${VPS_PASSWORD}" ssh sblue@165.22.167.150 'df -h'

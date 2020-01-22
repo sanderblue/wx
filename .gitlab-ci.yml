@@ -2,30 +2,30 @@ image: node:12
 
 stages:
   - build
-  - deploy
+  # - deploy
 
-cache:
-  key: '${CI_COMMIT_REF_SLUG}'
-  paths:
-    - node_modules/
+# cache:
+#   key: '${CI_COMMIT_REF_SLUG}'
+#   paths:
+#     - node_modules/
 
-build:
-  stage: build
-  script:
-    - npm install -g typescript @nrwl/cli @angular/cli ng-tailwindcss
-    - npm install
-    - npm run build:wx-frontend
-    - npm run build:wx-backend
-    - npm run build:wx-backend-cron
-  artifacts:
-    paths:
-      - dist/
-      - node_modules/
-      - package-lock.json
-      - package.json
-      - angular.json
-      - nx.json
-      - ng-tailwind.js
+# build:
+#   stage: build
+#   script:
+#     - npm install -g typescript @nrwl/cli @angular/cli ng-tailwindcss
+#     - npm install
+#     - npm run build:wx-frontend
+#     - npm run build:wx-backend
+#     - npm run build:wx-backend-cron
+#   artifacts:
+#     paths:
+#       - dist/
+#       - node_modules/
+#       - package-lock.json
+#       - package.json
+#       - angular.json
+#       - nx.json
+#       - ng-tailwind.js
 
 deploy:
   stage: deploy

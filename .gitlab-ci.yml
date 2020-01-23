@@ -29,7 +29,7 @@ deploy:
     - eval "$(ssh-agent)"
 
     - echo 'Injecting the remotes private key...'
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
   script:
     - echo 'Start script'
     - which ssh

@@ -5,7 +5,7 @@ stages:
 
 deploy:
   stage: deploy
-  when: manual
+  # when: manual
   only:
     - master
   # dependencies:

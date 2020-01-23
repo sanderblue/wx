@@ -13,23 +13,23 @@ deploy:
   image: ubuntu
   before_script:
     # Setup SSH
-    - echo "\n\n\n Start before_script"
-    - echo "\n\n\n SSH setup... \n"
+    - 'Start before_script'
+    - 'SSH setup...'
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
 
     # Append keyscan output into known hosts
-    - echo "\n\n\n Adding known hosts to known_hosts file... \n"
+    - 'Adding known hosts to known_hosts file...'
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
 
     # Inject the remote's private key
-    - echo "\n\n\n Initializing ssh-agent... \n"
+    - 'Initializing ssh-agent...'
     - eval "$(ssh-agent)"
 
-    - echo "\n\n\n Injecting the remotes private key... \n"
+    - 'Injecting the remotes private key...'
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
   script:
-    - echo "\n\n\n Start script"
+    - 'Start script'
     - which ssh

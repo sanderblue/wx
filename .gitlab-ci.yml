@@ -29,7 +29,7 @@ deploy:
     - eval "$(ssh-agent)"
 
     - echo 'Injecting the remotes private key...'
-    - echo "${SSH_PRIVATE_KEY_BASE64}" | tr -d ' ' | base64 --decode | ssh-add -
+    - echo "${SSH_PRIVATE_KEY}" | tr -d ' ' | base64 --decode | ssh-add -
   #   - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
   #   - echo "$SSH_PRIVATE_KEY"
   #   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null

@@ -19,7 +19,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix(globalPrefix);
 
-  const port = process.env.PORT || 3333;
+  const port = process.env.PORT || 3334;
 
   await app.listen(port, () => {
     console.log('Listening at https://localhost:' + port + '/' + globalPrefix);

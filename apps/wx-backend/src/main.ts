@@ -2,9 +2,19 @@ import * as fs from 'fs';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 
+const isProd = process.env.ENVIRONMENT === 'production';
+
+const SSL_KEY_FILE = isProd
+  ? '/etc/letsencrypt/live/knowyoursnow.com/fullchain.pem'
+  : __dirname + '/assets/server.key';
+
+const SSL_CERT_FILE = isProd
+  ? '/etc/letsencrypt/live/knowyoursnow.com/privkey.pem'
+  : __dirname + '/assets/server.crt';
+
 const httpsOptions = {
-  key: fs.readFileSync(__dirname + '/assets/server.key'),
-  cert: fs.readFileSync(__dirname + '/assets/server.crt'),
+  key: fs.readFileSync(SSL_KEY_FILE),
+  cert: fs.readFileSync(SSL_CERT_FILE),
   requestCert: false,
   rejectUnauthorized: false,
 };

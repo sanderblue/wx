@@ -24,7 +24,9 @@ const httpsOptions = isProd
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     httpsOptions,
-    cors: true,
+    cors: {
+      origin: '*', // for better security, specific allowed origins
+    },
   });
 
   const globalPrefix = 'api';

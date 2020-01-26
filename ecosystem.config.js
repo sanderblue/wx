@@ -4,7 +4,8 @@ module.exports = {
       name: 'wx',
       script: './dist/apps/wx-backend/main.js',
       env: {
-        NODE_ENV: 'development',
+        NODE_ENV: 'production',
+        ENVIRONMENT: 'development',
       },
       env_production: {
         NODE_ENV: 'production',

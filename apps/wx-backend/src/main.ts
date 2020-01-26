@@ -12,12 +12,14 @@ const SSL_CERT_FILE = isProd
   ? '/var/www/wx/server.crt'
   : __dirname + '/assets/server.crt';
 
-const httpsOptions = {
-  key: fs.readFileSync(SSL_KEY_FILE),
-  cert: fs.readFileSync(SSL_CERT_FILE),
-  requestCert: false,
-  rejectUnauthorized: false,
-};
+const httpsOptions = isProd
+  ? {}
+  : {
+      key: fs.readFileSync(SSL_KEY_FILE),
+      cert: fs.readFileSync(SSL_CERT_FILE),
+      requestCert: false,
+      rejectUnauthorized: false,
+    };
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

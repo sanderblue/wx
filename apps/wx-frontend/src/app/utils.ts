@@ -22,6 +22,16 @@ export function parseJSON<T>(json: string, fallbackReturn: T): T {
   }
 }
 
+export function buildQuery(q: ObjectLiteral): URLSearchParams {
+  const query = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(q)) {
+    query.set(key, JSON.stringify(value));
+  }
+
+  return query;
+}
+
 export function addLocationToQuery(location: string): URLSearchParams {
   const queryP = new URLSearchParams(window.location.search);
   const locations = parseJSON<string[]>(queryP.get('locations'), []);

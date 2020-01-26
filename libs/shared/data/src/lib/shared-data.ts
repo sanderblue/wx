@@ -19,6 +19,18 @@ export interface ObjectLiteral {
   [key: string]: any;
 }
 
+export interface MapStringBoolean {
+  [key: string]: boolean;
+}
+
+export interface MapStringString {
+  [key: string]: string;
+}
+
+export interface MapStringArray {
+  [key: string]: any[];
+}
+
 export interface WxStation {
   location: string;
 }

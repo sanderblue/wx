@@ -1,9 +1,10 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { Home } from './containers/home';
+import { Location } from './containers/location';
 import { Nav } from '@wx/ui';
 import {
   removeLocationFromQuery,
@@ -39,7 +40,7 @@ export const App = (props: RouteComponentProps) => {
       endDate: appState.endDate,
     });
 
-    history.push(`?${qp.toString()}`);
+    history.push(`?${decodeURIComponent(qp.toString())}`);
   }
 
   function removeLocation(l: string) {
@@ -59,12 +60,16 @@ export const App = (props: RouteComponentProps) => {
 
       <div className="flex flex-col min-h-full">
         <main className="main-content flex-1 bg-gray-100">
-          <Route
-            path="/"
-            render={(props) => (
-              <Home {...props} onClickRemoveLocation={removeLocation} />
-            )}
-          />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={(props) => (
+                <Home {...props} onClickRemoveLocation={removeLocation} />
+              )}
+            />
+            <Route path="/location/:id" component={Location} />
+          </Switch>
         </main>
       </div>
     </ApolloProvider>

@@ -5,11 +5,11 @@ import { AppModule } from './app/app.module';
 const isProd = process.env.ENVIRONMENT === 'production';
 
 const SSL_KEY_FILE = isProd
-  ? '/etc/letsencrypt/live/knowyoursnow.com/fullchain.pem'
+  ? '/var/www/wx/server.key'
   : __dirname + '/assets/server.key';
 
 const SSL_CERT_FILE = isProd
-  ? '/etc/letsencrypt/live/knowyoursnow.com/privkey.pem'
+  ? '/var/www/wx/server.crt'
   : __dirname + '/assets/server.crt';
 
 const httpsOptions = {

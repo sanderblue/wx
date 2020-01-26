@@ -1,33 +1,32 @@
 import * as fs from 'fs';
 import { NestFactory } from '@nestjs/core';
+import { NestApplicationOptions } from '@nestjs/common';
 import { AppModule } from './app/app.module';
 
 const isProd = process.env.ENVIRONMENT === 'production';
 
-// const SSL_KEY_FILE = isProd
-//   ? '/var/www/wx/server.key'
-//   : __dirname + '/assets/server.key';
+let appConfig: NestApplicationOptions = {
+  cors: {
+    origin: '*', // for better security, specific allowed origins
+  },
+};
 
-// const SSL_CERT_FILE = isProd
-//   ? '/var/www/wx/server.crt'
-//   : __dirname + '/assets/server.crt';
+if (!isProd) {
+  appConfig = {
+    ...appConfig,
+    httpsOptions: {
+      key: fs.readFileSync(__dirname + '/assets/server.key'),
+      cert: fs.readFileSync(__dirname + '/assets/server.crt'),
+      requestCert: false,
+      rejectUnauthorized: false,
+    },
+  };
+}
 
-// const httpsOptions = isProd
-//   ? {}
-//   : {
-//       key: fs.readFileSync(SSL_KEY_FILE),
-//       cert: fs.readFileSync(SSL_CERT_FILE),
-//       requestCert: false,
-//       rejectUnauthorized: false,
-//     };
+console.log('\n\nProduction?', appConfig);
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    // httpsOptions,
-    cors: {
-      origin: '*', // for better security, specific allowed origins
-    },
-  });
+  const app = await NestFactory.create(AppModule, appConfig);
 
   const globalPrefix = 'api';
 
@@ -35,9 +34,13 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3334;
 
-  await app.listen(port, () => {
-    console.log('Listening at https://localhost:' + port + '/' + globalPrefix);
-  });
+  try {
+    await app.listen(port);
+  } catch (error) {
+    console.log('ERROR:', error);
+
+    throw error;
+  }
 }
 
 bootstrap();

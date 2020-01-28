@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
 import { useParams, RouteComponentProps } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import { ApexOptions } from 'apexcharts';
 import { GET_OBSERVATIONS } from '../graphql/queries';
+import { buildQuery, generateDatesBetween, updateYearsQuery } from '../utils';
+import {
+  generateSeasonsData,
+  concatSeries,
+} from '../components/chart-data.service';
 import ChartNew from '../components/chart-new';
 import Checkboxes from '../components/checkboxes';
-import { buildQuery } from '../utils';
 
 export interface LocationProps extends RouteComponentProps {}
 
 export const Location = (props: LocationProps) => {
-  console.log('PARENT LocationComponent:', props);
-
   const { history } = props;
-
   const { id } = useParams();
   const [state, setState] = useState({
-    selected: {},
+    selected: {
+      '2014': false,
+      '2015': false,
+      '2016': false,
+      '2017': false,
+      '2018': true,
+      '2019': true,
+    },
   });
 
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
@@ -23,10 +32,6 @@ export const Location = (props: LocationProps) => {
       locations: [id],
     },
   });
-
-  // console.log('useParams:', id);
-  // console.log('useLocation:', search);
-  // console.log('DATA:', data);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -36,48 +41,57 @@ export const Location = (props: LocationProps) => {
     return <div>Error! {error.message}</div>;
   }
 
-  const years = {};
+  const dateRange = generateDatesBetween(
+    new Date('2018-10-02'),
+    new Date('2019-06-02'),
+  );
 
-  if (data.observations) {
-    const groupByYear = data.observations.filter((d) => {
-      const year = new Date(d.date).getFullYear();
-      years[year] = false;
+  const seasons = generateSeasonsData(
+    state.selected,
+    data.observations,
+    dateRange.length,
+  );
 
-      if (new Date(d.date).getFullYear() === 2014) {
-        // console.log('2014: ', d.date);
-      }
-    });
-  }
+  const series = concatSeries(state.selected, seasons);
 
-  const yrs = Object.keys(years);
-
-  // console.log('Years: ', yrs);
-  // console.log('State:', state);
+  const chartOptions: ApexOptions = {
+    chart: {
+      id: 'basic-line',
+      height: '500px',
+      type: 'line',
+      fontFamily: 'Avenir',
+    },
+    xaxis: {
+      type: 'category',
+      categories: dateRange,
+      tickAmount: 20,
+    },
+    yaxis: {
+      tickAmount: 10,
+      labels: {
+        align: 'left',
+      },
+    },
+    stroke: {
+      curve: 'stepline',
+    },
+    tooltip: {
+      shared: true,
+    },
+  };
 
   function onChangeCheckbox(s) {
-    console.log('PARENT s:', s);
-
     state.selected = s;
 
-    console.log('PARENT State:', state);
-
-    const selectedYears = [];
-
-    for (const [key, checked] of Object.entries(state.selected)) {
-      if (checked) {
-        selectedYears.push(key);
-      }
-    }
-
-    console.log('PARENT selectedYears:', selectedYears);
-
     const query = buildQuery({
-      query: selectedYears,
+      query: updateYearsQuery(state.selected),
     });
 
-    console.log('PARENT query:', decodeURIComponent(query.toString()));
-
     history.push(`?${decodeURIComponent(query.toString())}`);
+
+    setState({
+      ...state,
+    });
   }
 
   return (
@@ -92,14 +106,14 @@ export const Location = (props: LocationProps) => {
             <form className="w-full max-w-sm">
               <div className="md:flex md:items-center mb-6">
                 <Checkboxes
-                  keyValueMap={years}
+                  keyValueMap={state.selected}
                   onChangeCheckbox={onChangeCheckbox}
                 ></Checkboxes>
               </div>
             </form>
           </div>
           <div className="w-full h-400 md:h-600">
-            <ChartNew chartOptions={{}} series={[]}></ChartNew>
+            <ChartNew chartOptions={chartOptions} series={series}></ChartNew>
           </div>
         </div>
       </div>

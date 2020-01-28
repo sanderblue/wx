@@ -1,3 +1,5 @@
+import ApexAxisChartSeries from 'apexcharts';
+
 export interface AppState {
   location: string;
   locations: string[];
@@ -13,6 +15,14 @@ export interface SnowDepthObservationDaily {
   elevation: number;
   averageSnowDepthForDate: number;
   hourlyObservations: number[];
+}
+
+export interface SeasonsData {
+  [key: string]: {
+    startDate: Date;
+    endDate: Date;
+    series: ApexAxisChartSeries;
+  };
 }
 
 export interface ObjectLiteral {

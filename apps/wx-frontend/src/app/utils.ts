@@ -1,4 +1,5 @@
-import { ObjectLiteral } from '@wx/shared/data';
+import { ObjectLiteral, MapStringBoolean } from '@wx/shared/data';
+import moment from 'moment';
 
 export function parseQueryParams(queryParams: URLSearchParams): ObjectLiteral {
   const p = {};
@@ -101,4 +102,35 @@ export function buildQueryParams(items: ObjectLiteral) {
   }
 
   return qp;
+}
+
+export function generateDatesBetween(
+  startDate: Date,
+  endDate: Date,
+  format = 'MMM DD',
+): any[] {
+  const dates = [];
+
+  let currDate = moment(startDate).startOf('day');
+  let lastDate = moment(endDate).startOf('day');
+
+  while (currDate.add(1, 'days').diff(lastDate) <= 0) {
+    const d = currDate.clone().format(format);
+
+    dates.push(d);
+  }
+
+  return dates;
+}
+
+export function updateYearsQuery(selectedYears: MapStringBoolean) {
+  const years = [];
+
+  for (const [key, checked] of Object.entries(selectedYears)) {
+    if (checked) {
+      years.push(key);
+    }
+  }
+
+  return years;
 }

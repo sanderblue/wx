@@ -13,8 +13,6 @@ export const Checkboxes = (props: CheckboxesProps) => {
     ...keyValueMap,
   });
 
-  console.log('CheckboxesComponent:', state);
-
   function onChangeSelected(item) {
     const s = state;
     s[item] = !state[item];
@@ -28,7 +26,7 @@ export const Checkboxes = (props: CheckboxesProps) => {
     <div>
       {Object.keys(keyValueMap).map((item, i) => {
         return (
-          <label key={i} className="">
+          <label key={i} className="mr-4">
             <input
               type="checkbox"
               checked={state[item]}

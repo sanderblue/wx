@@ -20,7 +20,7 @@ const store: Store = {
   locations: [],
 };
 
-interface AutocompleteProps extends RouteComponentProps {
+interface AutocompleteProps {
   onSelectResult?: Function;
 }
 
@@ -131,4 +131,4 @@ export const Autocomplete = (props: AutocompleteProps) => {
   );
 };
 
-export default withRouter(Autocomplete);
+export default Autocomplete;

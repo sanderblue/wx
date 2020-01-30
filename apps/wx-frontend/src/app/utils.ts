@@ -11,6 +11,38 @@ export function parseQueryParams(queryParams: URLSearchParams): ObjectLiteral {
   return p;
 }
 
+export function parseQueryString(qs: string): ObjectLiteral {
+  const parsed = parseQueryParams(new URLSearchParams(qs));
+
+  const locations = parseJSON<string[]>(parsed.locations, []);
+
+  return {
+    locations,
+    startDate: parsed.startDate,
+    endDate: parsed.endDate,
+  };
+}
+
+export function buildQueryParams(items: ObjectLiteral) {
+  const qp = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(items)) {
+    if (value instanceof Array) {
+      qp.set(key, JSON.stringify(value));
+    } else {
+      qp.set(key, value);
+    }
+  }
+
+  return qp;
+}
+
+export function getQuery<T>(queryString: string, fallbackReturn: T): T {
+  const query = new URLSearchParams(queryString).get('query');
+
+  return parseJSON<T>(query, fallbackReturn);
+}
+
 export function parseJSON<T>(json: string, fallbackReturn: T): T {
   try {
     const result = JSON.parse(json);
@@ -76,32 +108,6 @@ export function getLocationsFromQueryString(queryString: string): string[] {
   const parsed = parseQueryParams(new URLSearchParams(queryString));
 
   return parseJSON<string[]>(parsed.locations, []);
-}
-
-export function parseQueryString(qs: string): ObjectLiteral {
-  const parsed = parseQueryParams(new URLSearchParams(qs));
-
-  const locations = parseJSON<string[]>(parsed.locations, []);
-
-  return {
-    locations,
-    startDate: parsed.startDate,
-    endDate: parsed.endDate,
-  };
-}
-
-export function buildQueryParams(items: ObjectLiteral) {
-  const qp = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(items)) {
-    if (value instanceof Array) {
-      qp.set(key, JSON.stringify(value));
-    } else {
-      qp.set(key, value);
-    }
-  }
-
-  return qp;
 }
 
 export function generateDatesBetween(

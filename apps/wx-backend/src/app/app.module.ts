@@ -11,6 +11,7 @@ import { SnowController } from './snow/snow.controller';
 import {
   SnowDepthObservationDailyEntity,
   WeatherStationEntity,
+  SnowDepthObservationHourlyEntity,
 } from '@wx/backend/entities';
 import { AppGraphQLModule } from '@wx/backend/graphql';
 
@@ -24,7 +25,11 @@ import { AppGraphQLModule } from '@wx/backend/graphql';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: 'defaultdb',
-      entities: [SnowDepthObservationDailyEntity, WeatherStationEntity],
+      entities: [
+        SnowDepthObservationDailyEntity,
+        SnowDepthObservationHourlyEntity,
+        WeatherStationEntity,
+      ],
       synchronize: process.env.ENVIRONMENT === 'production' ? false : true,
       ssl: true,
     }),

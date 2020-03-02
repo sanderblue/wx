@@ -5,6 +5,7 @@ import { ScheduleModule } from 'nest-schedule';
 import {
   SnowDepthObservationDailyEntity,
   WeatherStationEntity,
+  SnowDepthObservationHourlyEntity,
 } from '@wx/backend/entities';
 import { SnowCronService } from './cron/snow-cron.service';
 import { ServicesModule } from '@wx/backend/services';
@@ -19,7 +20,11 @@ import { ServicesModule } from '@wx/backend/services';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: 'defaultdb',
-      entities: [SnowDepthObservationDailyEntity, WeatherStationEntity],
+      entities: [
+        SnowDepthObservationDailyEntity,
+        SnowDepthObservationHourlyEntity,
+        WeatherStationEntity,
+      ],
       synchronize: process.env.ENVIRONMENT === 'production' ? false : true,
       ssl: true,
     }),

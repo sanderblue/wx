@@ -23,21 +23,17 @@ if (!isProd) {
   };
 }
 
-console.log('\n\nProduction?', appConfig);
-
 async function bootstrap() {
+  const port = process.env.PORT || 3334;
+  const globalPrefix = 'api';
   const app = await NestFactory.create(AppModule, appConfig);
 
-  const globalPrefix = 'api';
-
   app.setGlobalPrefix(globalPrefix);
-
-  const port = process.env.PORT || 3334;
 
   try {
     await app.listen(port);
   } catch (error) {
-    console.log('ERROR:', error);
+    console.log(`ERROR - ${this.constructor.name}:`, error);
 
     throw error;
   }

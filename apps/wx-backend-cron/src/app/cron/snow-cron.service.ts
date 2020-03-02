@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Injectable } from '@nestjs/common';
 import { Cron, NestSchedule } from 'nest-schedule';
 import { DataService, DataAggregatorService } from '@wx/backend/services';
+import { SnowDepthObservationHourlyEntity } from '@wx/backend/entities';
 
 type LocationString = 'mt-hood' | 'crystal' | 'mt-baker-ski-area';
 
@@ -10,8 +11,8 @@ type LocationString = 'mt-hood' | 'crystal' | 'mt-baker-ski-area';
 export class SnowCronService extends NestSchedule {
   private locations: LocationString[] = [
     'mt-hood',
-    'crystal',
-    'mt-baker-ski-area',
+    // 'crystal',
+    // 'mt-baker-ski-area',
   ];
 
   private pathToFiles = `${__dirname}/assets`;
@@ -29,13 +30,15 @@ export class SnowCronService extends NestSchedule {
     immediate: true,
   })
   async cronJob() {
-    const startDate = new Date('2019-10-01');
+    const startDate = new Date('2020-02-01');
     const endDate = new Date();
+    const startDateString = startDate.toLocaleDateString();
+    const endDateString = endDate.toLocaleDateString();
 
     await Promise.all(
       this.locations.map(async (location) => {
         console.log(
-          `\ncron job: start | location: ${location} | startDate: ${startDate} | endDate: ${endDate}\n`,
+          `\ncron job: start | location: ${location} | startDate: ${startDateString} | endDate: ${endDateString}\n`,
         );
 
         return await this.execute(location, startDate, endDate);
@@ -56,14 +59,25 @@ export class SnowCronService extends NestSchedule {
         `${this.pathToFiles}/data-${location}.csv`,
       );
 
-      const data = await this.dataService.convertCsvFileToJson(result.path);
-      const dailyData = this.dataAggregator.aggregateDailySnowDepthData(data);
-      const dailyResult = JSON.stringify(dailyData);
-      const filePath = `${this.pathToFiles}/snow-depth-observations-daily-${location}.json`;
+      const data = await this.dataService.convertCsvFileToJson<
+        SnowDepthObservationHourlyEntity
+      >(result.path);
 
-      fs.writeFileSync(filePath, dailyResult);
+      console.log('');
+      console.log('Data Count:', data.length);
+      console.log('');
 
-      await this.dataService.saveNew(dailyData);
+      await this.dataService.saveNewHourly(data);
+
+      // const dailyData = this.dataAggregator.aggregateDailySnowDepthData(data);
+      // const dailyResult = JSON.stringify(dailyData);
+      // const filePath = `${this.pathToFiles}/snow-depth-observations-daily-${location}.json`;
+
+      // console.log('Writing to file:', filePath);
+
+      // fs.writeFileSync(filePath, dailyResult);
+
+      // await this.dataService.saveNew(dailyData);
     } catch (error) {
       console.error('Error caught:', error.message);
     }

@@ -17,6 +17,15 @@ export interface SnowDepthObservationDaily {
   hourlyObservations: number[];
 }
 
+export interface SnowDepthObservationHourly {
+  id?: number;
+  location: string;
+  date: string;
+  timestamp: number;
+  elevation: number;
+  snowDepth: number;
+}
+
 export interface SeasonsData {
   [key: string]: {
     startDate: Date;

@@ -3,10 +3,12 @@ import forIn from 'lodash/forIn';
 import groupBy from 'lodash/groupBy';
 import map from 'lodash/map';
 import mean from 'lodash/mean';
+import min from 'lodash/min';
 import head from 'lodash/head';
 import toNumber from 'lodash/toNumber';
 import flatten from 'lodash/flatten';
 import filter from 'lodash/filter';
+import clone from 'lodash/clone';
 import {
   SnowDepthObservationDailyEntity,
   SnowDepthObservationHourlyEntity,
@@ -18,6 +20,11 @@ interface ObjectGeneric {
 
 @Injectable()
 export class DataAggregatorService {
+  // Hourly observations cannot deviate more than 18 units
+  // from a normal expected value. E.g. snow depth can't be 287.5"
+  // at 2pm when it was 89.3" at 1pm.
+  private maxDeviation = 18;
+
   constructor() {}
 
   public extractLocationsFromData(data: ObjectGeneric[]) {
@@ -39,24 +46,17 @@ export class DataAggregatorService {
    * TODO: move this to a proper service
    */
   public aggregateDailySnowDepthData(data) {
-    const locations = this.extractLocationsFromData(data);
-
-    console.log('Locations:', locations);
-
     let arraysOfData: any[] = [];
     let groupedByLocation = groupBy(data, 'location');
 
-    forIn(
-      groupedByLocation,
-      (locationData: Array<object>, location: string) => {
-        let dailyDataResult = this.aggregateDailyValuesForLocation(
-          locationData,
-          location,
-        );
+    forIn(groupedByLocation, (locationData: object[], location: string) => {
+      let dailyDataResult = this.aggregateDailyValuesForLocation(
+        locationData,
+        location,
+      );
 
-        arraysOfData.push(dailyDataResult);
-      },
-    );
+      arraysOfData.push(dailyDataResult);
+    });
 
     return flatten(arraysOfData);
   }
@@ -74,8 +74,27 @@ export class DataAggregatorService {
         );
         let accurateHourlyValues = this.getAccurateHourlyObservationData(
           hourlyObservationValues,
+          date,
+          location,
         );
-        let average: any = mean(accurateHourlyValues);
+
+        let average: number = mean(accurateHourlyValues);
+
+        const isDateForCheck =
+          date === '2016-04-13' ||
+          date === '2016-04-14' ||
+          date === '2016-04-15' ||
+          date === '2016-04-16' ||
+          date === '2016-04-17';
+
+        if (isDateForCheck && location === 'MtHoodMeadowsBase') {
+          console.log(' ');
+          console.log(' ');
+          console.log('DATE:', date);
+          console.log('average:', average);
+          console.log(' ');
+          console.log(' ');
+        }
 
         return {
           timestamp: new Date(date).getTime(),
@@ -89,14 +108,37 @@ export class DataAggregatorService {
     );
   }
 
-  public getAccurateHourlyObservationData(values: number[]): number[] {
-    let potentiallyInaccurateMeanValue = mean(values);
-    let stdDvtn = this.calculateStandardDeviation(values);
+  public getAccurateHourlyObservationData(
+    values: number[],
+    date: any, // only for debugging
+    location: any, // only for debugging
+  ): number[] {
+    const month = new Date(date).getMonth();
+    const isWinter = month === 10 || month === 11 || (month > 0 && month < 4);
 
-    let allowedMinVal = potentiallyInaccurateMeanValue - stdDvtn;
-    let allowedMaxVal = potentiallyInaccurateMeanValue + stdDvtn;
+    if (isWinter) {
+      values = values.filter((v) => v > 0);
+    }
 
-    return filter(values, (value: any) => {
+    const stdDvtn = this.calculateStandardDeviation(values);
+    const invalidDvtn = stdDvtn > this.maxDeviation;
+    const median = this.median(values);
+    let allowedMinVal = invalidDvtn
+      ? min(values) - this.maxDeviation
+      : median - stdDvtn;
+    let allowedMaxVal = invalidDvtn
+      ? min(values) + this.maxDeviation
+      : median + stdDvtn;
+
+    if (allowedMinVal < 0) {
+      allowedMinVal = 0;
+    }
+
+    const results = filter(values, (value: number) => {
+      if (isWinter && value <= 0) {
+        return false;
+      }
+
       if (value < 0) {
         return false;
       }
@@ -109,23 +151,56 @@ export class DataAggregatorService {
         return true;
       }
 
-      return value > allowedMinVal && value < allowedMaxVal;
+      return value >= allowedMinVal && value <= allowedMaxVal;
     });
+
+    if (
+      (date === '2016-04-13' ||
+        date === '2016-04-14' ||
+        date === '2016-04-15' ||
+        date === '2016-04-16' ||
+        date === '2016-04-17') &&
+      location === 'MtHoodMeadowsBase'
+    ) {
+      console.log(' ');
+      console.log(' ');
+
+      console.log('DATE:               ', date);
+      console.log('MEDIAN:             ', this.median(values));
+      console.log('Standard Deviation: ', stdDvtn);
+      console.log('Starting Values:    ', values);
+      console.log('Min Value:          ', allowedMinVal);
+      console.log('Max Value:          ', allowedMaxVal);
+      console.log('Accurate Results?:  ', results);
+      console.log(' ');
+      console.log(' ');
+      console.log(' ');
+    }
+
+    return results;
   }
 
-  public mapHourlyObservations(data: any): Array<object> {
-    return map(data, (obj: any) => {
-      let snowDepth = parseFloat(obj.snowDepth);
-
+  public mapHourlyObservations(
+    data: SnowDepthObservationHourlyEntity[],
+  ): object[] {
+    return map(data, (obj) => {
       return {
         timestamp: obj.timestamp,
-        snowDepth: snowDepth > 0 ? toNumber(snowDepth.toFixed(3)) : 0,
+        snowDepth: obj.snowDepth > 0 ? toNumber(obj.snowDepth.toFixed(3)) : 0,
         location: obj.location,
       };
     });
   }
 
-  public calculateStandardDeviation(values: number[]): number {
+  /**
+   * Calculates standard deviation of the provided values. If a deviation limit is provided,
+   * the standard deviation value cannot be above this value. If the calculated standard
+   * devation is above the limit, then the standard deviation will be set to the devation limit.
+   */
+  public calculateStandardDeviation(
+    values: number[],
+    deviationLimit?: number,
+  ): number {
     let avg = mean(values);
     let varianceValues = map(values, (n: number) => {
       let diff = avg - n;
@@ -135,7 +210,23 @@ export class DataAggregatorService {
     });
 
     let avgVariance = mean(varianceValues);
+    let stdDev = Math.sqrt(avgVariance);
 
-    return Math.sqrt(avgVariance);
+    if (deviationLimit && stdDev > deviationLimit) {
+      stdDev = deviationLimit;
+    }
+
+    return stdDev;
+  }
+
+  public median(array: number[]): number {
+    const arr = clone(array).sort();
+
+    // If array length is even
+    if (arr.length % 2 === 0) {
+      return (arr[arr.length / 2] + arr[arr.length / 2 - 1]) / 2;
+    }
+
+    return arr[(arr.length - 1) / 2];
   }
 }

@@ -7,13 +7,19 @@ import toNumber from 'lodash/toNumber';
 import { Injectable } from '@nestjs/common';
 import { CsvService } from '../csv/csv.service';
 import { SnowDepthObservationDailyRepository } from '../repository/snow-depth-observation-daily.repository';
-import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
+import {
+  SnowDepthObservationDailyEntity,
+  SnowDepthObservationHourlyEntity,
+} from '@wx/backend/entities';
+import { SnowDepthObservationHourly } from '@wx/shared/data';
+import { SnowDepthObservationHourlyRepository } from '../repository/snow-depth-observation-hourly.repository';
 
 @Injectable()
 export class DataService {
   constructor(
     private readonly csvService: CsvService,
     private readonly repository: SnowDepthObservationDailyRepository,
+    private readonly repositoryHourly: SnowDepthObservationHourlyRepository,
   ) {}
 
   public async saveNew(
@@ -22,6 +28,14 @@ export class DataService {
     const entities = await this.repository.create(d);
 
     return await this.repository.saveNew(entities);
+  }
+
+  public async saveNewHourly(
+    d: SnowDepthObservationHourlyEntity[],
+  ): Promise<SnowDepthObservationHourlyEntity[]> {
+    const entities = await this.repositoryHourly.create(d);
+
+    return await this.repositoryHourly.saveNew(entities);
   }
 
   public async update(
@@ -55,15 +69,15 @@ export class DataService {
           });
         })
         .catch((error: any) => {
-          console.error(`ERROR: ${error.message}`);
+          console.error(`ERROR - ${this.constructor.name}:`, error);
 
           reject(error);
         });
     });
   }
 
-  public convertCsvFileToJson(filePath: string): Promise<any> {
-    let observationsData: any[] = [];
+  public convertCsvFileToJson<T>(filePath: string): Promise<T[]> {
+    const observationsData: T[] = [];
 
     return new Promise((resolve, reject) => {
       csv({
@@ -75,7 +89,7 @@ export class DataService {
         })
         .on('data', (data: Buffer) => {
           const row = this.convertBuffer(data);
-          const rowData = this.processDataRow(row);
+          const rowData = this.processDataRow<T>(row);
 
           rowData.forEach((d) => {
             observationsData.push(d);
@@ -93,7 +107,7 @@ export class DataService {
     });
   }
 
-  private processDataRow(row: any): any[] {
+  private processDataRow<T>(row: any): T[] {
     let observationDateTime: Date;
     let observationTimestamp: number;
     let d = [];

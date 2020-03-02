@@ -1,50 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindConditions, UpdateResult } from 'typeorm';
-import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
+import { SnowDepthObservationHourlyEntity } from '@wx/backend/entities';
 
 @Injectable()
-export class SnowDepthObservationDailyRepository {
+export class SnowDepthObservationHourlyRepository {
   constructor(
-    @InjectRepository(SnowDepthObservationDailyEntity)
-    private readonly repository: Repository<SnowDepthObservationDailyEntity>,
+    @InjectRepository(SnowDepthObservationHourlyEntity)
+    private readonly repository: Repository<SnowDepthObservationHourlyEntity>,
   ) {}
 
   public async find(
-    conditions: FindConditions<Partial<SnowDepthObservationDailyEntity>> = {},
-  ): Promise<SnowDepthObservationDailyEntity[]> {
+    conditions: FindConditions<Partial<SnowDepthObservationHourlyEntity>> = {},
+  ): Promise<SnowDepthObservationHourlyEntity[]> {
     return this.repository.find(conditions);
   }
 
   public async findWhere(
     conditions: any,
-  ): Promise<SnowDepthObservationDailyEntity[]> {
+  ): Promise<SnowDepthObservationHourlyEntity[]> {
     return this.repository.find(conditions);
   }
 
   public async create(
-    d: SnowDepthObservationDailyEntity[],
-  ): Promise<SnowDepthObservationDailyEntity[]> {
+    d: SnowDepthObservationHourlyEntity[],
+  ): Promise<SnowDepthObservationHourlyEntity[]> {
     return this.repository.create(d);
   }
 
   public async save(
-    d: SnowDepthObservationDailyEntity[],
-  ): Promise<SnowDepthObservationDailyEntity[]> {
+    d: SnowDepthObservationHourlyEntity[],
+  ): Promise<SnowDepthObservationHourlyEntity[]> {
     const entities = await this.repository.create(d);
 
     return this.repository.save(entities);
   }
 
   public async saveOne(
-    d: SnowDepthObservationDailyEntity,
-  ): Promise<SnowDepthObservationDailyEntity> {
+    d: SnowDepthObservationHourlyEntity,
+  ): Promise<SnowDepthObservationHourlyEntity> {
     return this.repository.save(d);
   }
 
   public async saveNew(
-    d: SnowDepthObservationDailyEntity[],
-  ): Promise<SnowDepthObservationDailyEntity[]> {
+    d: SnowDepthObservationHourlyEntity[],
+  ): Promise<SnowDepthObservationHourlyEntity[]> {
     return await Promise.all(
       d.map(async (entity) => {
         const conditions = {
@@ -58,12 +58,12 @@ export class SnowDepthObservationDailyRepository {
           return this.saveOne(entity);
         }
 
-        this.updateOne(conditions, entity);
+        // this.updateOne(conditions, entity);
       }),
     );
   }
 
-  public async update(d: SnowDepthObservationDailyEntity[]): Promise<any[]> {
+  public async update(d: SnowDepthObservationHourlyEntity[]): Promise<any[]> {
     return await Promise.all(
       d.map(async (s, i) => {
         return await this.updateOne(
@@ -78,9 +78,9 @@ export class SnowDepthObservationDailyRepository {
   }
 
   public async updateOne(
-    conditions: FindConditions<Partial<SnowDepthObservationDailyEntity>>,
-    entity: SnowDepthObservationDailyEntity,
-  ): Promise<SnowDepthObservationDailyEntity> {
+    conditions: FindConditions<Partial<SnowDepthObservationHourlyEntity>>,
+    entity: SnowDepthObservationHourlyEntity,
+  ): Promise<SnowDepthObservationHourlyEntity> {
     try {
       // console.log('');
       // console.log('UPDATE ONE:', entity);

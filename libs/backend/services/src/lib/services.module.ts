@@ -4,9 +4,11 @@ import { DataService } from './data/data.service';
 import { CsvService } from './csv/csv.service';
 import {
   SnowDepthObservationDailyEntity,
+  SnowDepthObservationHourlyEntity,
   WeatherStationEntity,
 } from '@wx/backend/entities';
 import { SnowDepthObservationDailyRepository } from './repository/snow-depth-observation-daily.repository';
+import { SnowDepthObservationHourlyRepository } from './repository/snow-depth-observation-hourly.repository';
 import { DataAggregatorService } from './data/data-aggregator.service';
 import { WeatherStationRepository } from './repository/weather-station.repository';
 
@@ -14,6 +16,7 @@ import { WeatherStationRepository } from './repository/weather-station.repositor
   imports: [
     TypeOrmModule.forFeature([
       SnowDepthObservationDailyEntity,
+      SnowDepthObservationHourlyEntity,
       WeatherStationEntity,
     ]),
   ],
@@ -21,6 +24,7 @@ import { WeatherStationRepository } from './repository/weather-station.repositor
     DataService,
     CsvService,
     SnowDepthObservationDailyRepository,
+    SnowDepthObservationHourlyRepository,
     DataAggregatorService,
     WeatherStationRepository,
   ],
@@ -28,6 +32,7 @@ import { WeatherStationRepository } from './repository/weather-station.repositor
     DataService,
     CsvService,
     SnowDepthObservationDailyRepository,
+    SnowDepthObservationHourlyRepository,
     DataAggregatorService,
     WeatherStationRepository,
   ],

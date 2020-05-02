@@ -23,7 +23,7 @@ if (!isProd) {
   };
 }
 
-console.log('\n\nProduction?', appConfig);
+// console.log('\n\nProduction?', appConfig);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, appConfig);
@@ -36,6 +36,8 @@ async function bootstrap() {
 
   try {
     await app.listen(port);
+
+    console.log(`Server running at: https://localhost:${process.env.PORT}`);
   } catch (error) {
     console.log('ERROR:', error);
 

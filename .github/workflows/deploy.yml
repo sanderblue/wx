@@ -15,16 +15,16 @@ jobs:
       - name: Checkout master
         uses: actions/checkout@master
 
-      # - name: Use Node.js ${{ matrix.node-version }}
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-      # - name: Install dependencies
-      #   run: npm install
+      - name: Install dependencies
+        run: npm install
 
-      # - name: Build wx-backend
-      #   run: npm run build:wx-backend:prod
+      - name: Build wx-backend
+        run: npm run build:wx-backend:prod
 
       - name: Copy files to VPS via scp
         uses: appleboy/scp-action@master
@@ -32,6 +32,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY_PRIVATE_BLUE_PROJECT_VPS }}
-          passphrase: ${{ secrets.SSH_PASSWORD_2 }}
+          passphrase: ${{ secrets.SSH_PASSWORD_BLUE_PROJECT_VPS }}
           source: '.'
-          target: '/var/www/wx-github-action-test'
+          target: '/var/www/wx'

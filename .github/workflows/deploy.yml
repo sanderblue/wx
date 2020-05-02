@@ -32,7 +32,7 @@ jobs:
           HOST: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USER }}
           PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          KEY: ${{ secrets.SSH_KEY_PRIVATE_BLUE_PROJECT_VPS }}
+          # KEY: ${{ secrets.SSH_KEY_PRIVATE_BLUE_PROJECT_VPS }}
         with:
           source: '.'
           target: '/var/www/wx-github-action-test'

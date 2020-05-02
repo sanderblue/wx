@@ -8,6 +8,7 @@ import {
 } from '@wx/backend/services';
 import { WeatherStationRepository } from '@wx/backend/services';
 import { weatherStations } from '@wx/shared/data';
+import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
 
 type LocationString = 'mt-hood' | 'crystal' | 'mt-baker-ski-area';
 
@@ -57,9 +58,16 @@ export class SnowController {
           `\ncron job: start | location: ${location} | startDate: ${startDate} | endDate: ${today}\n`,
         );
 
-        return await this.doSnowDepth(location, startDate, today);
+        const result = await this.doSnowDepth(location, startDate, today);
+
+        console.log('Snow Depth Complete...', result);
+        return result;
       }),
     );
+
+    return {
+      message: 'Succes',
+    };
   }
 
   @Get('/weather-station')
@@ -77,7 +85,7 @@ export class SnowController {
     location: LocationString,
     startDate: Date,
     endDate: Date,
-  ) {
+  ): Promise<SnowDepthObservationDailyEntity[]> {
     try {
       const result = await this.dataService.downloadToFile(
         this.getSnowDepthUrl(location, startDate, endDate),
@@ -91,7 +99,7 @@ export class SnowController {
 
       fs.writeFileSync(filePath, dailyResult);
 
-      await this.dataService.saveNew(dailyData);
+      return await this.dataService.saveNew(dailyData);
     } catch (error) {
       console.error('Error caught:', error.message);
     }

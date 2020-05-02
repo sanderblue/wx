@@ -84,11 +84,11 @@ export class DataService {
         .on('end', () => {
           console.log('Finished converting to JSON.');
 
-          resolve(observationsData);
+          return resolve(observationsData);
         })
         .on('error', (error: Error) => {
           console.error('Error converting csv to json:', error.message);
-          reject(error);
+          return reject(error);
         });
     });
   }

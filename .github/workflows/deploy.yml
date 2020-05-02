@@ -31,8 +31,8 @@ jobs:
         env:
           HOST: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USER }}
-          # PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          KEY: ${{ secrets.SSH_KEY_AUTHORIZED_BLUE_PROJECT_VPS }}
+          PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          # KEY: ${{ secrets.SSH_KEY_AUTHORIZED_BLUE_PROJECT_VPS }}
         with:
           source: '.'
           target: '/var/www/wx-github-action-test'

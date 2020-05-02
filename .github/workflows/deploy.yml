@@ -32,6 +32,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY_PRIVATE_BLUE_PROJECT_VPS }}
-          passphrase: ${{ secrets.SSH_PASSWORD }}
+          passphrase: ${{ secrets.SSH_PASSWORD_2 }}
           source: '.'
           target: '/var/www/wx-github-action-test'

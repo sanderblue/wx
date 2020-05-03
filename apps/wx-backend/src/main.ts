@@ -13,13 +13,6 @@ let appConfig: NestApplicationOptions = {
   },
 };
 
-console.log(
-  'process.env.NEW_RELIC_LICENSE_KEY:',
-  process.env.NEW_RELIC_LICENSE_KEY,
-);
-
-console.log('process.env.NEW_RELIC_HOME: ', process.env.NEW_RELIC_HOME);
-
 if (!isProd) {
   appConfig = {
     ...appConfig,

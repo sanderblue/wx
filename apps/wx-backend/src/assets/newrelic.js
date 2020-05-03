@@ -1,5 +1,10 @@
 'use strict';
 
+console.log(
+  'process.env.NEW_RELIC_LICENSE_KEY:',
+  process.env.NEW_RELIC_LICENSE_KEY,
+);
+
 /**
  * New Relic agent configuration.
  *

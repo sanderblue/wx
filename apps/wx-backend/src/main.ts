@@ -1,3 +1,5 @@
+const newrelic = require('newrelic');
+
 import * as fs from 'fs';
 import { NestFactory } from '@nestjs/core';
 import { NestApplicationOptions } from '@nestjs/common';
@@ -10,6 +12,13 @@ let appConfig: NestApplicationOptions = {
     origin: '*', // for better security, specific allowed origins
   },
 };
+
+console.log(
+  'process.env.NEW_RELIC_LICENSE_KEY:',
+  process.env.NEW_RELIC_LICENSE_KEY,
+);
+
+console.log('process.env.NEW_RELIC_HOME: ', process.env.NEW_RELIC_HOME);
 
 if (!isProd) {
   appConfig = {

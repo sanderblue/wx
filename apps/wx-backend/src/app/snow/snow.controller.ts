@@ -50,7 +50,7 @@ export class SnowController {
     const startDate = new Date(today);
 
     // Helps ensure we don't miss any data by overlapping days
-    startDate.setDate(startDate.getDate() - 3);
+    startDate.setDate(startDate.getDate() - 2);
 
     await Promise.all(
       this.locations.map(async (location) => {

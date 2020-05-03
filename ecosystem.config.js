@@ -10,6 +10,7 @@ module.exports = {
       env_production: {
         NODE_ENV: 'production',
         ENVIRONMENT: 'production',
+        NEW_RELIC_LICENSE_KEY: process.env.NEW_RELIC_LICENSE_KEY,
       },
     },
   ],

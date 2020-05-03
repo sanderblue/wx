@@ -10,7 +10,13 @@ import { WeatherStationRepository } from '@wx/backend/services';
 import { weatherStations } from '@wx/shared/data';
 import { SnowDepthObservationDailyEntity } from '@wx/backend/entities';
 
-type LocationString = 'mt-hood' | 'crystal' | 'mt-baker-ski-area';
+type LocationString =
+  | 'mt-hood'
+  | 'crystal'
+  | 'mt-baker-ski-area'
+  | 'mt-rainier'
+  | 'snoqualmie-pass'
+  | 'washington-pass';
 
 @Controller('snow')
 export class SnowController {
@@ -18,6 +24,9 @@ export class SnowController {
     'mt-hood',
     'crystal',
     'mt-baker-ski-area',
+    'mt-rainier',
+    'snoqualmie-pass',
+    'washington-pass',
   ];
 
   private pathToFiles = `${__dirname}/assets`;
@@ -60,7 +69,7 @@ export class SnowController {
 
         const result = await this.doSnowDepth(location, startDate, today);
 
-        console.log('Snow Depth Complete...', result);
+        console.log('Snow Depth Complete...', result ? result.length : 0);
         return result;
       }),
     );
@@ -86,6 +95,8 @@ export class SnowController {
     startDate: Date,
     endDate: Date,
   ): Promise<SnowDepthObservationDailyEntity[]> {
+    const snowDepthURL = this.getSnowDepthUrl(location, startDate, endDate);
+
     try {
       const result = await this.dataService.downloadToFile(
         this.getSnowDepthUrl(location, startDate, endDate),
@@ -101,7 +112,7 @@ export class SnowController {
 
       return await this.dataService.saveNew(dailyData);
     } catch (error) {
-      console.error('Error caught:', error.message);
+      console.error('Error caught:', error.message, `: ${snowDepthURL}`);
     }
   }
 

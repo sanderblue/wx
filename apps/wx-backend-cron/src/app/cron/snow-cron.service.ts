@@ -4,7 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { Cron, NestSchedule } from 'nest-schedule';
 import { DataService, DataAggregatorService } from '@wx/backend/services';
 
-type LocationString = 'mt-hood' | 'crystal' | 'mt-baker-ski-area';
+type LocationString =
+  | 'mt-hood'
+  | 'crystal'
+  | 'mt-baker-ski-area'
+  | 'mt-rainier'
+  | 'snoqualmie-pass'
+  | 'washington-pass';
 
 @Injectable()
 export class SnowCronService extends NestSchedule {
@@ -12,6 +18,9 @@ export class SnowCronService extends NestSchedule {
     'mt-hood',
     'crystal',
     'mt-baker-ski-area',
+    'mt-rainier',
+    'snoqualmie-pass',
+    'washington-pass',
   ];
 
   private pathToFiles = `${__dirname}/assets`;

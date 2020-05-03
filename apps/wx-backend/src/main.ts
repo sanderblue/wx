@@ -30,8 +30,6 @@ if (!isProd) {
   };
 }
 
-// console.log('\n\nProduction?', appConfig);
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, appConfig);
 
@@ -46,7 +44,7 @@ async function bootstrap() {
 
     console.log(`Server running at: https://localhost:${process.env.PORT}`);
   } catch (error) {
-    console.log('ERROR:', error);
+    console.log(`Error:bootstrap:`, error);
 
     throw error;
   }

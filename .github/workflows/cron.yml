@@ -2,12 +2,11 @@ name: Snow depth cron
 
 on:
   schedule:
-    # Runs every minute
     - cron: '* * * * *'
 
 jobs:
   build:
-    name: Build, push, and deploy
+    name: Cron job
     runs-on: ubuntu-latest
     steps:
       - name: 'Run snow depth job'

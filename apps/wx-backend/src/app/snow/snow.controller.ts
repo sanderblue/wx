@@ -66,7 +66,7 @@ export class SnowController {
     );
 
     return {
-      message: 'Succes',
+      message: 'Success',
     };
   }
 

@@ -35,3 +35,13 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE_BLUE_PROJECT_VPS }}
           source: '.'
           target: '/var/www/wx'
+
+      - name: Restart wx-backend service
+        uses: appleboy/ssh-action@master
+        with:
+          with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY_PRIVATE_BLUE_PROJECT_VPS }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE_BLUE_PROJECT_VPS }}
+          script: cd /var/www/wx && pm2 restart ecosystem.config.js --env production

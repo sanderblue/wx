@@ -8,7 +8,6 @@ jobs:
   cron:
     name: Cron job
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: 'Run snow depth job'
         run: curl -X POST https://knowyoursnow.com/api/snow/depth

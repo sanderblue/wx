@@ -1,0 +1,13 @@
+name: Snow depth cron
+
+on:
+  schedule:
+    - cron: '* * * * *' # Runs every minute
+
+jobs:
+  build:
+    name: Build, push, and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Run snow depth job'
+        run: curl -X POST https://knowyoursnow.com/api/snow/depth

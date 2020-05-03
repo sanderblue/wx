@@ -2,7 +2,8 @@ name: Snow depth cron
 
 on:
   schedule:
-    - cron: '* * * * *' # Runs every minute
+    # Runs every minute
+    - cron: '* * * * *'
 
 jobs:
   build:

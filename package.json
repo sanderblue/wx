@@ -12,7 +12,7 @@
     "start:wx-backend-cron": "PORT=4444 ng serve wx-backend-cron",
     "build": "ng build",
     "build:wx-backend": "ng build wx-backend",
-    "build:wx-backend:prod": "ENVIRONMENT=production ng build wx-backend",
+    "build:wx-backend:prod": "rm -rf dist/apps/wx-backend && ENVIRONMENT=production ng build wx-backend --prod",
     "build:wx-backend-cron": "ng build wx-backend-cron",
     "build:wx-frontend": "./node_modules/.bin/ngtw build && ng build wx-frontend",
     "build:wx-frontend:prod": "./node_modules/.bin/ngtw build && ng build wx-frontend --prod",

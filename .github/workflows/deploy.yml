@@ -58,4 +58,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY_PRIVATE_BLUE_PROJECT_VPS }}
           passphrase: ${{ secrets.SSH_PASSPHRASE_BLUE_PROJECT_VPS }}
-          script: NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }} pm2 restart /var/www/wx/ecosystem.config.js --env production --update-env
+          script: cp /var/www/newrelic.js /var/www/wx/dist/apps/wx-backend && NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }} pm2 restart /var/www/wx/ecosystem.config.js --env production --update-env

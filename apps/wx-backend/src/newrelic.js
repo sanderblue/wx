@@ -1,8 +1,8 @@
 'use strict';
 
 console.log(
-  'process.env.NEW_RELIC_LICENSE_KEY:',
-  process.env.NEW_RELIC_LICENSE_KEY,
+  'newrelic.js has NEW_RELIC_LICENSE_KEY:',
+  Boolean(process.env.NEW_RELIC_LICENSE_KEY),
 );
 
 /**

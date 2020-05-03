@@ -2,7 +2,7 @@ name: Snow depth cron
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/1 * * * *'
 
 jobs:
   build:

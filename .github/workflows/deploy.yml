@@ -59,3 +59,9 @@ jobs:
           key: ${{ secrets.SSH_KEY_PRIVATE_BLUE_PROJECT_VPS }}
           passphrase: ${{ secrets.SSH_PASSPHRASE_BLUE_PROJECT_VPS }}
           script: cp /var/www/newrelic.js /var/www/wx/dist/apps/wx-backend && NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }} pm2 restart /var/www/wx/ecosystem.config.js --env production --update-env
+
+      - name: Create deploy marker
+        env:
+          NEW_RELIC_REGION: US
+          NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
+        run: docker run -i -e NEW_RELIC_API_KEY -e NEW_RELIC_REGION newrelic/cli apm deployment create --applicationId 516005664 --revision ${{ secrets.GITHUB_SHA }}

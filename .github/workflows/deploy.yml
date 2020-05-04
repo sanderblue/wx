@@ -66,4 +66,4 @@ jobs:
           NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
         run: |
           docker pull newrelic/cli
-          docker run -i --rm -e NEW_RELIC_API_KEY -e NEW_RELIC_REGION newrelic/cli apm deployment create --accountId  --applicationId ${{ secrets.NEW_RELIC_ACCOUNT_ID }} --revision $GITHUB_SHA
+          docker run -i --rm -e NEW_RELIC_API_KEY -e NEW_RELIC_REGION newrelic/cli apm deployment create  --applicationId 516005664 --revision test

@@ -2,12 +2,12 @@ name: Snow depth cron
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: "*/20 * * * *"
 
 jobs:
   cron:
     name: Cron job
     runs-on: ubuntu-latest
     steps:
-      - name: 'Run snow depth job'
+      - name: "Run snow depth job"
         run: curl -X POST https://knowyoursnow.com/api/snow/depth

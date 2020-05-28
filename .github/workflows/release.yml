@@ -22,7 +22,7 @@ jobs:
         env:
           cache-name: node-modules-cache
         with:
-          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -63,7 +63,7 @@ jobs:
         run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF:10}
 
       - name: Create New Relic deployment marker
-        uses: newrelic/deployment-marker-action@master
+        uses: newrelic/deployment-marker-action@v1
         with:
           apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
           accountId: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}

@@ -69,3 +69,7 @@ jobs:
           accountId: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}
           applicationId: ${{ secrets.NEW_RELIC_APPLICATION_ID }}
           revision: '${{ env.RELEASE_VERSION }}'
+          changelog: 'See https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md for details'
+          description: "Automated Deployment via Github Actions"
+          region: ${{ secrets.NEW_RELIC_REGION }} # default: 'US'
+          user: '${{ github.actor }}' # default: github user

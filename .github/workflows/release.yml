@@ -53,17 +53,19 @@ jobs:
       - name: Restart wx-backend service
         uses: appleboy/ssh-action@master
         with:
-          with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY_PRIVATE_BLUE_PROJECT_VPS }}
           passphrase: ${{ secrets.SSH_PASSPHRASE_BLUE_PROJECT_VPS }}
           script: cp /var/www/newrelic.js /var/www/wx/dist/apps/wx-backend && NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }} pm2 restart /var/www/wx/ecosystem.config.js --env production --update-env
 
-      - name: Create deploy marker
-        env:
-          NEW_RELIC_REGION: US
-          NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
-        run: |
-          docker pull newrelic/cli
-          docker run -i --rm -e NEW_RELIC_API_KEY -e NEW_RELIC_REGION newrelic/cli apm deployment create  --applicationId 516005664 --revision test
+      - name: Set Release Version from Tag
+        run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF:10}
+
+      - name: Create New Relic deployment marker
+        uses: newrelic/deployment-marker-action@master
+        with:
+          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
+          accountId: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}
+          applicationId: ${{ secrets.NEW_RELIC_APPLICATION_ID }}
+          revision: '${{ env.RELEASE_VERSION }}'

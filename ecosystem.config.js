@@ -3,6 +3,8 @@ module.exports = {
     {
       name: 'wx',
       script: './dist/apps/wx-backend/main.js',
+      exec_mode: 'cluster',
+      instances: 'max',
       env: {
         NODE_ENV: 'production',
         ENVIRONMENT: 'development',

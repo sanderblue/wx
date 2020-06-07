@@ -42,6 +42,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build wx-frontend
+        run: npm run build:wx-frontend:prod
+
       - name: Build wx-backend
         run: npm run build:wx-backend:prod
 

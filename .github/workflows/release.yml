@@ -1,9 +1,14 @@
 name: Build and deploy
 
+# on:
+#   push:
+#     tags:
+#       - 'v*'
+
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - master
 
 jobs:
   build:

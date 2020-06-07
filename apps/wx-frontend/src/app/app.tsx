@@ -31,7 +31,7 @@ export const App = (props: RouteComponentProps) => {
       locations,
     };
 
-    console.log('updateAppState:', appState);
+    console.log('App::updateAppState:', appState);
 
     const qp = buildQueryParams({
       locations: appState.locations,

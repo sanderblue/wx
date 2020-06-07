@@ -10,7 +10,6 @@ export interface NavProps {
 
 export const Nav = (props: NavProps) => {
   const { updateAppState } = props;
-
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const defaultStartYear = currentYear - 1;
@@ -24,10 +23,16 @@ export const Nav = (props: NavProps) => {
   });
 
   function onSelectSearchResult(result: WxStation) {
-    setState({
+    const updatedState = {
       ...state,
       location: result.location,
-    });
+    };
+
+    setState(updatedState);
+
+    if (state.startDate && state.endDate) {
+      updateAppState(updatedState);
+    }
   }
 
   function onChangeStartDate(event) {
@@ -52,7 +57,7 @@ export const Nav = (props: NavProps) => {
 
   return (
     <nav className="bg-gray-900 p-3 text-white">
-      <form onSubmit={onSubmitForm} className="flex justify-between">
+      <form className="flex justify-between" onSubmit={onSubmitForm}>
         <div className="mr-4 w-108 relative">
           <label className="block text-gray-500 text-xs font-bold">
             Search

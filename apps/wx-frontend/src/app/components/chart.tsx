@@ -33,10 +33,7 @@ interface ChartProps {
  * Component
  */
 export const AppChart = (props: ChartProps) => {
-  console.log('Chart::props', props);
-
   const { startDate, endDate } = props;
-
   const locations = props.locations || [];
   const { loading, error, data } = useQuery(GET_OBSERVATIONS, {
     variables: {
@@ -100,7 +97,7 @@ export const AppChart = (props: ChartProps) => {
     series,
   };
 
-  console.log('CHART state:', state);
+  // console.log('CHART state:', state);
 
   return (
     <ReactApexChart

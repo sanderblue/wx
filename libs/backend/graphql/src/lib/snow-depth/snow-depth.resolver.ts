@@ -16,6 +16,10 @@ export class SnowDepthResolver {
     @Args({ name: 'locations', type: () => [String] })
     locations: string[] = [],
   ) {
+    if (!locations.length) {
+      return [];
+    }
+
     const query = locations.map((v) => {
       return {
         location: v,

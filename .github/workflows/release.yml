@@ -49,7 +49,7 @@ jobs:
         run: npm run build:wx-backend:prod
 
       - name: Copy files to VPS via scp
-        uses: appleboy/scp-action@v1
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
@@ -59,7 +59,7 @@ jobs:
           target: '/var/www/wx'
 
       - name: Restart wx-backend service
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}

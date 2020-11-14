@@ -49,7 +49,7 @@ jobs:
         run: npm run build:wx-backend:prod
 
       - name: Copy files to VPS via scp
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}

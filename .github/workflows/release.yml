@@ -59,7 +59,7 @@ jobs:
           target: '/var/www/wx'
 
       - name: Restart wx-backend service
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}

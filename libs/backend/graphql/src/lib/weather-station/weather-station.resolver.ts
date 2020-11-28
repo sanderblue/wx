@@ -9,6 +9,7 @@ export class WeatherStationResolver {
 
   @Query((returns) => [WeatherStation])
   async weatherStations(@Args('query') query: string) {
+    // return await this.repository.find();
     return await this.repository.findWhere({
       where: [
         {

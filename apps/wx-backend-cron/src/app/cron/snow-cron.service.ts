@@ -38,7 +38,8 @@ export class SnowCronService extends NestSchedule {
     immediate: true,
   })
   async cronJob() {
-    const startDate = new Date('2019-10-01');
+    // Get data starting from 30 days ago
+    const startDate = new Date(new Date().setDate(new Date().getDate() - 30));
     const endDate = new Date();
 
     await Promise.all(
@@ -59,6 +60,8 @@ export class SnowCronService extends NestSchedule {
     startDate: Date,
     endDate: Date,
   ) {
+    console.log('cron job: execute\n');
+
     try {
       const result = await this.dataService.downloadToFile(
         this.getSnowDepthUrl(location, startDate, endDate),
@@ -90,7 +93,7 @@ export class SnowCronService extends NestSchedule {
       `Fetching snow observation data for date range: ${startDateFormatted} to ${endDateFormatted}`,
     );
 
-    return `https://www.nwac.us/data-portal/csv/location/${location}/sensortype/snow_depth/start-date/${startDateFormatted}/end-date/${endDateFormatted}/`;
+    return `https://www.nwac.us/data-portal/csv/${location}/sensortype/snow_depth/start-date/${startDateFormatted}/end-date/${endDateFormatted}/`;
   }
 }
 

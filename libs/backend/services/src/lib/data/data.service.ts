@@ -33,6 +33,10 @@ export class DataService {
   public async downloadToFile(url: string, dest: string = './'): Promise<any> {
     let file = fs.createWriteStream(dest);
 
+    console.log(`Snow Depth URL: ${url}`);
+
+    // Example URL: NEW    https://www.nwac.us/data-portal/csv/mt-baker-ski-area/sensortype/snow_depth/start-date/2020-11-01/end-date/2020-11-13
+    //              OLD    https://www.nwac.us/data-portal/csv/location/mt-baker-ski-area/sensortype/snow_depth/start-date/2019-09-30/end-date/2020-11-14/
     return new Promise((resolve: any, reject: any) => {
       file.on('finish', () => {
         file.close();

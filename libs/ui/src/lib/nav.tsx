@@ -12,8 +12,8 @@ export const Nav = (props: NavProps) => {
   const { updateAppState } = props;
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const defaultStartYear = currentYear - 1;
-  const defaultStartDate = `${defaultStartYear}-10-01`;
+  const defaultStartYear = currentYear; // - 1;
+  const defaultStartDate = `${defaultStartYear}-9-01`;
   const defaultEndDate = moment().format('YYYY-MM-DD');
 
   const [state, setState] = useState({

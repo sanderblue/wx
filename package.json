@@ -65,7 +65,7 @@
     "document-register-element": "1.13.1",
     "graphql": "^14.5.8",
     "graphql-tools": "^4.0.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "mysql": "^2.17.1",
     "nest-schedule": "^0.6.3",

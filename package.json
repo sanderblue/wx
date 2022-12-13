@@ -52,7 +52,7 @@
     "@nestjs/common": "^6.10.11",
     "@nestjs/core": "^6.10.11",
     "@nestjs/graphql": "^6.5.3",
-    "@nestjs/platform-express": "^6.10.11",
+    "@nestjs/platform-express": "^9.2.1",
     "@nestjs/typeorm": "^6.2.0",
     "@newrelic/native-metrics": "^5.0.0",
     "@nrwl/angular": "^8.9.0",
